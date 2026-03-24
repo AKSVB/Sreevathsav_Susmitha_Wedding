@@ -208,7 +208,104 @@
         .gallery-grid img:hover {
             transform: scale(1.02);
         }
+/* --- THE POLAROID SCRAPBOOK --- */
+        .gallery-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 25px;
+            padding: 20px 0;
+        }
 
+        .polaroid-card {
+            background: #fff;
+            padding: 12px 12px 25px 12px;
+            border-radius: 4px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            width: 260px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        /* Alternate rotations for a scattered look */
+        .polaroid-card:nth-child(odd) { transform: rotate(-3deg); }
+        .polaroid-card:nth-child(even) { transform: rotate(4deg); }
+        .polaroid-card:nth-child(3n) { transform: rotate(-2deg); }
+
+        .polaroid-card:hover {
+            transform: scale(1.1) rotate(0deg) translateY(-10px) !important;
+            box-shadow: 0 15px 35px rgba(201, 42, 42, 0.25);
+            z-index: 10;
+        }
+
+        /* --- THE CONTINENTAL TIMELINE --- */
+        .timeline-container {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px 0;
+        }
+        
+        .timeline-container::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            background: rgba(245, 176, 65, 0.4); /* Secondary color */
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -2px;
+            border-radius: 2px;
+        }
+
+        .timeline-step {
+            padding: 10px 40px;
+            position: relative;
+            background-color: inherit;
+            width: 50%;
+            box-sizing: border-box;
+        }
+
+        .timeline-step:nth-child(odd) { left: 0; text-align: right; }
+        .timeline-step:nth-child(even) { left: 50%; }
+
+        .timeline-marker {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            right: -20px;
+            background-color: var(--primary);
+            border: 4px solid #fff;
+            border-radius: 50%;
+            top: 15px;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .timeline-step:nth-child(even) .timeline-marker { left: -20px; }
+
+        .timeline-content {
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid rgba(201, 42, 42, 0.1);
+        }
+        
+        .timeline-content h3 { margin: 0 0 10px 0; color: var(--primary); font-family: 'Playfair Display', serif; }
+        .timeline-content p { margin: 0; font-size: 0.95rem; color: #555; }
+
+        @media (max-width: 768px) {
+            .timeline-container::after { left: 31px; }
+            .timeline-step { width: 100%; padding-left: 70px; padding-right: 25px; }
+            .timeline-step:nth-child(odd) { text-align: left; }
+            .timeline-marker { left: 11px !important; }
+        }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideUp { to { transform: translateY(0); opacity: 1; } }
 
@@ -233,7 +330,32 @@
     </nav>
 
     <div class="container">
-        
+        <div id="journey" class="card" style="animation-delay: 0.1s;">
+            <h2>Our Journey</h2>
+            <div class="timeline-container">
+                <div class="timeline-step">
+                    <div class="timeline-marker">🔬</div>
+                    <div class="timeline-content">
+                        <h3>The Foundation</h3>
+                        <p>Where the roots of research and discovery were laid amidst the labs of IIT Kharagpur.</p>
+                    </div>
+                </div>
+                <div class="timeline-step">
+                    <div class="timeline-marker">✈️</div>
+                    <div class="timeline-content">
+                        <h3>Across Continents</h3>
+                        <p>A new chapter unfolds with scientific pursuits at the CEA research center in the heart of France.</p>
+                    </div>
+                </div>
+                <div class="timeline-step">
+                    <div class="timeline-marker">🔥</div>
+                    <div class="timeline-content">
+                        <h3>The Sacred Fire</h3>
+                        <p>April 23, 2026 • Stepping into the Grihastha Ashrama, united by Vedic traditions and love.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div id="upload" class="card" style="animation-delay: 0.2s;">
             <h2>Share Photos & Videos</h2>
             <p style="text-align: center;">Upload your favorite moments from the festivities.</p>
@@ -468,20 +590,21 @@
             snapshot.forEach((doc) => {
                 const data = doc.data();
                 const mediaElement = document.createElement('div');
-                mediaElement.style.breakInside = 'avoid'; 
-                mediaElement.style.marginBottom = '20px';
+                // Apply the new Polaroid CSS class!
+                mediaElement.className = 'polaroid-card'; 
 
                 let mediaContent = '';
                 if (data.fileType && data.fileType.startsWith('video/')) {
-                    mediaContent = `<video src="${data.fileUrl}" controls style="width: 100%; border-radius: 10px; border: 3px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1);"></video>`;
+                    mediaContent = `<video src="${data.fileUrl}" controls style="width: 100%; height: 200px; object-fit: cover; border-radius: 2px;"></video>`;
                 } else {
-                    mediaContent = `<img src="${data.fileUrl}" alt="Wedding Memory" style="width: 100%; border-radius: 10px; border: 3px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">`;
+                    mediaContent = `<img src="${data.fileUrl}" alt="Wedding Memory" style="width: 100%; height: 200px; object-fit: cover; border-radius: 2px;">`;
                 }
 
+                // A cleaner, minimalist caption inside the polaroid
                 const captionHTML = `
-                    <div style="background: rgba(255, 255, 255, 0.95); padding: 12px; border-radius: 8px; margin-top: -10px; position: relative; z-index: 2; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
-                        <strong style="color: var(--primary); font-size: 0.95rem;">${data.name}</strong>
-                        ${data.caption ? `<p style="margin: 5px 0 0 0; color: #555; font-size: 0.85rem; font-style: italic;">"${data.caption}"</p>` : ''}
+                    <div style="margin-top: 12px; text-align: center;">
+                        <strong style="color: var(--text-dark); font-family: 'Playfair Display', serif; font-size: 1.1rem;">${data.name}</strong>
+                        ${data.caption ? `<p style="margin: 5px 0 0 0; color: #777; font-size: 0.85rem;">${data.caption}</p>` : ''}
                     </div>
                 `;
 
