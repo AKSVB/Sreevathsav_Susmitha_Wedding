@@ -248,7 +248,7 @@
                     </label>
                     <label>
                         <input type="radio" name="privacy" value="private"> 
-                        🔒 Private (For Sreevathsav & Susmitha Only)
+                        🔒 Private (For Us Only)
                     </label>
                 </div>
 
@@ -286,23 +286,21 @@
             <h2>The Gallery</h2>
             <p style="text-align: center;">Shared memories from our loved ones.</p>
             <div class="gallery-grid">
-                <img src="https://placehold.co/500x500/f5b041/3e2723?text=Your+Haldi+Pic+Here" alt="Haldi placeholder">
-                <img src="https://placehold.co/500x750/c92a2a/fff?text=Your+Muhurtham+Pic+Here" alt="Muhurtham placeholder">
-            </div>
+                </div>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+        // 🔥 Added query, orderBy, where, onSnapshot for the live gallery
+        import { getFirestore, collection, addDoc, serverTimestamp, query, orderBy, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
         import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-storage.js";
 
-        // 🔥 UPDATED CONFIGURATION
         const firebaseConfig = {
           apiKey: "AIzaSyBRR2elLneGSivN4-8fqyf9QdV6U3uzWWQ",
           authDomain: "ourlovelywedding-53662.firebaseapp.com",
           projectId: "ourlovelywedding-53662",
-          storageBucket: "ourlovelywedding-53662.firebasestorage.app",// Matches your manual bucket name
+          storageBucket: "ourlovelywedding-53662.firebasestorage.app",
           messagingSenderId: "711916877913",
           appId: "1:711916877913:web:315706a6eaa64e408d1948"
         };
@@ -311,6 +309,7 @@
         const db = getFirestore(app);
         const storage = getStorage(app);
 
+        // --- Photo/Video Upload Logic ---
         const mediaInput = document.getElementById('mediaInput');
         const mediaPreview = document.getElementById('mediaPreview');
         let selectedFiles = [];
@@ -447,6 +446,48 @@
                 uploadAudioBtn.innerText = "Send Voice Note";
                 uploadAudioBtn.disabled = false;
             }
+        });
+
+        // --- 🚀 NEW: Live Gallery Fetching Logic ---
+        const galleryGrid = document.querySelector('.gallery-grid');
+
+        const memoriesQuery = query(
+            collection(db, "guest_memories"),
+            where("isPrivate", "==", false), 
+            orderBy("timestamp", "desc")
+        );
+
+        onSnapshot(memoriesQuery, (snapshot) => {
+            galleryGrid.innerHTML = ''; 
+
+            if (snapshot.empty) {
+                galleryGrid.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: #777;">No memories shared yet. Be the first!</p>';
+                return;
+            }
+
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                const mediaElement = document.createElement('div');
+                mediaElement.style.breakInside = 'avoid'; 
+                mediaElement.style.marginBottom = '20px';
+
+                let mediaContent = '';
+                if (data.fileType && data.fileType.startsWith('video/')) {
+                    mediaContent = `<video src="${data.fileUrl}" controls style="width: 100%; border-radius: 10px; border: 3px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1);"></video>`;
+                } else {
+                    mediaContent = `<img src="${data.fileUrl}" alt="Wedding Memory" style="width: 100%; border-radius: 10px; border: 3px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">`;
+                }
+
+                const captionHTML = `
+                    <div style="background: rgba(255, 255, 255, 0.95); padding: 12px; border-radius: 8px; margin-top: -10px; position: relative; z-index: 2; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                        <strong style="color: var(--primary); font-size: 0.95rem;">${data.name}</strong>
+                        ${data.caption ? `<p style="margin: 5px 0 0 0; color: #555; font-size: 0.85rem; font-style: italic;">"${data.caption}"</p>` : ''}
+                    </div>
+                `;
+
+                mediaElement.innerHTML = mediaContent + captionHTML;
+                galleryGrid.appendChild(mediaElement);
+            });
         });
     </script>
 </body>
