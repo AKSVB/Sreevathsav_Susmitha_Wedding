@@ -236,7 +236,7 @@
         
         <div id="upload" class="card" style="animation-delay: 0.2s;">
             <h2>Share Photos & Videos</h2>
-            <p style="text-align: center;">Upload your favorite moments from the festivities. Select multiple files at once!</p>
+            <p style="text-align: center;">Upload your favorite moments from the festivities.</p>
             
             <form id="mediaForm">
                 <input type="text" id="mediaName" placeholder="Your Name" required>
@@ -284,37 +284,33 @@
 
         <div id="gallery" class="card" style="animation-delay: 0.6s;">
             <h2>The Gallery</h2>
-            <p style="text-align: center;">Shared memories from our loved ones, plus official photos uploaded by us.</p>
+            <p style="text-align: center;">Shared memories from our loved ones.</p>
             <div class="gallery-grid">
                 <img src="https://placehold.co/500x500/f5b041/3e2723?text=Your+Haldi+Pic+Here" alt="Haldi placeholder">
                 <img src="https://placehold.co/500x750/c92a2a/fff?text=Your+Muhurtham+Pic+Here" alt="Muhurtham placeholder">
-                <img src="https://placehold.co/500x500/f5b041/3e2723?text=Your+Mehndi+Pic+Here" alt="Mehndi placeholder">
             </div>
         </div>
     </div>
 
     <script type="module">
-        // 1. Import Firebase Functions
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
         import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
         import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-storage.js";
 
-        // 2. Your Firebase Configuration (Pasted from your project)
+        // 🔥 UPDATED CONFIGURATION
         const firebaseConfig = {
           apiKey: "AIzaSyBRR2elLneGSivN4-8fqyf9QdV6U3uzWWQ",
           authDomain: "ourlovelywedding-53662.firebaseapp.com",
           projectId: "ourlovelywedding-53662",
-          storageBucket: "ourlovelywedding-53662.firebasestorage.app",
+          storageBucket: "ourlovelywedding-53662", // Matches your manual bucket name
           messagingSenderId: "711916877913",
           appId: "1:711916877913:web:315706a6eaa64e408d1948"
         };
 
-        // 3. Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const storage = getStorage(app);
 
-        // --- Frontend UI Logic (Previews) ---
         const mediaInput = document.getElementById('mediaInput');
         const mediaPreview = document.getElementById('mediaPreview');
         let selectedFiles = [];
@@ -322,7 +318,6 @@
         mediaInput.addEventListener('change', function() {
             mediaPreview.innerHTML = ''; 
             selectedFiles = Array.from(this.files);
-
             selectedFiles.forEach(file => {
                 const reader = new FileReader();
                 reader.onload = function(e) {
@@ -341,7 +336,6 @@
             });
         });
 
-        // --- Firebase Upload Logic: Photos/Videos ---
         document.getElementById('mediaForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             if (selectedFiles.length === 0) return alert("Please select at least one photo or video.");
@@ -355,38 +349,35 @@
             submitBtn.disabled = true;
 
             try {
-                let fileUrls = [];
-                // Upload each file to Firebase Storage
                 for (const file of selectedFiles) {
                     const storageRef = ref(storage, `wedding_uploads/${Date.now()}_${file.name}`);
                     const uploadTask = await uploadBytesResumable(storageRef, file);
                     const downloadURL = await getDownloadURL(uploadTask.ref);
-                    fileUrls.push({ url: downloadURL, type: file.type });
+
+                    await addDoc(collection(db, "guest_memories"), {
+                        name: uploaderName,
+                        caption: caption,
+                        isPrivate: isPrivate,
+                        fileUrl: downloadURL,
+                        fileType: file.type,
+                        timestamp: serverTimestamp()
+                    });
                 }
 
-                // Save data to Firestore Database
-                await addDoc(collection(db, "guest_memories"), {
-                    name: uploaderName,
-                    caption: caption,
-                    isPrivate: isPrivate,
-                    files: fileUrls,
-                    timestamp: serverTimestamp()
-                });
-
-                alert(isPrivate ? "Saved securely to your private vault!" : "Added to the public gallery!");
+                alert(isPrivate ? "Saved securely to your private vault!" : "Added to the gallery!");
                 e.target.reset();
                 mediaPreview.innerHTML = '';
                 selectedFiles = [];
             } catch (error) {
-                console.error("Error uploading: ", error);
-                alert("An error occurred while uploading. Please try again.");
+                console.error("Error: ", error);
+                alert("Upload failed. Make sure the CORS command was run in the terminal!");
             } finally {
                 submitBtn.innerText = "Upload Memories";
                 submitBtn.disabled = false;
             }
         });
 
-        // --- Firebase Upload Logic: Voice Notes ---
+        // --- Voice Note Logic ---
         let mediaRecorder;
         let audioChunks = [];
         let finalAudioBlob = null;
@@ -400,9 +391,7 @@
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                 mediaRecorder = new MediaRecorder(stream);
-                
                 mediaRecorder.ondataavailable = event => audioChunks.push(event.data);
-
                 mediaRecorder.onstop = () => {
                     finalAudioBlob = new Blob(audioChunks, { type: 'audio/webm' });
                     audioPlayback.src = URL.createObjectURL(finalAudioBlob);
@@ -410,7 +399,6 @@
                     uploadAudioBtn.style.display = 'block';
                     audioChunks = [];
                 };
-
                 mediaRecorder.start();
                 recordBtn.style.display = 'none';
                 stopBtn.style.display = 'block';
@@ -429,22 +417,18 @@
 
         uploadAudioBtn.addEventListener('click', async () => {
             if (!finalAudioBlob) return;
-            
             const guestName = document.getElementById('audioName').value;
-            if (!guestName) return alert("Please enter your name first!");
+            if (!guestName) return alert("Please enter your name!");
 
             const isPrivate = document.querySelector('input[name="audio_privacy"]:checked').value === 'private';
-            
             uploadAudioBtn.innerText = "Sending...";
             uploadAudioBtn.disabled = true;
 
             try {
-                // Upload Audio to Storage
                 const storageRef = ref(storage, `voice_notes/${Date.now()}_${guestName}.webm`);
                 const uploadTask = await uploadBytesResumable(storageRef, finalAudioBlob);
                 const downloadURL = await getDownloadURL(uploadTask.ref);
 
-                // Save info to Database
                 await addDoc(collection(db, "voice_notes"), {
                     name: guestName,
                     isPrivate: isPrivate,
@@ -452,15 +436,13 @@
                     timestamp: serverTimestamp()
                 });
 
-                alert(isPrivate ? "Voice note saved to private vault!" : "Voice note added!");
-                document.getElementById('audioName').value = '';
+                alert("Voice note sent!");
                 audioPlayback.style.display = 'none';
                 uploadAudioBtn.style.display = 'none';
                 recordBtn.innerText = '⏺ Start Recording';
                 finalAudioBlob = null;
             } catch (error) {
-                console.error("Error uploading audio:", error);
-                alert("Failed to send voice note.");
+                alert("Failed to send.");
             } finally {
                 uploadAudioBtn.innerText = "Send Voice Note";
                 uploadAudioBtn.disabled = false;
