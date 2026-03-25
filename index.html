@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sreevathsav & Susmitha | A Vedic Wedding Celebration</title>
+    <title>Sreevathsav & Susmitha | A Vedic Celebration</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,400&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -14,283 +14,74 @@
             --glass-bg: rgba(255, 255, 255, 0.9);
         }
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-dark);
-            margin: 0;
-            padding: 0;
-            scroll-behavior: smooth;
-        }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--bg-color); color: var(--text-dark); margin: 0; padding: 0; scroll-behavior: smooth; }
 
-        header {
-            height: 85vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            background: linear-gradient(rgba(62, 39, 35, 0.7), rgba(62, 39, 35, 0.7)), url('cover.png') center/cover fixed;
-            animation: fadeIn 2s ease-in-out;
-            position: relative;
-        }
+        header { height: 85vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: linear-gradient(rgba(62, 39, 35, 0.7), rgba(62, 39, 35, 0.7)), url('cover.png') center/cover fixed; animation: fadeIn 2s ease-in-out; position: relative; }
+        h1 { font-family: 'Playfair Display', serif; font-size: 4.5rem; margin: 0; text-shadow: 2px 2px 8px rgba(0,0,0,0.5); color: #fff9e6; }
+        .subtitle { font-size: 1.2rem; letter-spacing: 3px; margin-top: 15px; text-transform: uppercase; color: var(--secondary); font-weight: 500; }
 
-        h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 4.5rem;
-            margin: 0;
-            text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
-            color: #fff9e6;
-        }
+        .countdown-container { position: relative; display: flex; gap: 15px; margin-top: 30px; z-index: 10; flex-wrap: wrap; justify-content: center; }
+        .countdown-box { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 12px; padding: 15px 20px; min-width: 70px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .countdown-number { font-size: 2.2rem; font-weight: 700; color: #fff; display: block; font-family: 'Poppins', sans-serif; }
+        .countdown-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--secondary); font-weight: 500; }
+        .just-married-msg { font-family: 'Playfair Display', serif; font-size: 2.5rem; color: var(--secondary); text-shadow: 2px 2px 8px rgba(0,0,0,0.5); animation: fadeIn 2s ease-in-out; }
 
-        .subtitle {
-            font-size: 1.2rem;
-            letter-spacing: 3px;
-            margin-top: 15px;
-            text-transform: uppercase;
-            color: var(--secondary);
-            font-weight: 500;
-        }
+        nav { background: white; padding: 1rem; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 15px rgba(0,0,0,0.08); display: flex; justify-content: center; gap: 20px; border-bottom: 3px solid var(--secondary); }
+        nav a { text-decoration: none; color: var(--text-dark); font-weight: 500; padding: 8px 16px; border-radius: 20px; transition: all 0.3s; }
+        nav a:hover { background: var(--secondary); color: var(--text-dark); }
 
-        /* --- THE LIVE COUNTDOWN --- */
-        .countdown-container {
-            position: relative;
-            display: flex;
-            gap: 15px;
-            margin-top: 30px;
-            z-index: 10;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
+        .container { max-width: 1000px; margin: 3rem auto; padding: 0 20px; }
+        .card { background: var(--glass-bg); backdrop-filter: blur(10px); border-radius: 20px; padding: 2.5rem; margin-bottom: 3rem; box-shadow: 0 8px 32px rgba(201, 42, 42, 0.08); border: 1px solid rgba(245, 176, 65, 0.3); transform: translateY(20px); opacity: 0; animation: slideUp 0.8s forwards ease-out; }
+        h2 { font-family: 'Playfair Display', serif; color: var(--primary); font-size: 2.5rem; text-align: center; margin-top: 0; }
 
-        .countdown-box {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
-            padding: 15px 20px;
-            min-width: 70px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-
-        .countdown-number {
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: #fff;
-            display: block;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .countdown-label {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--secondary);
-            font-weight: 500;
-        }
-
-        .just-married-msg {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
-            color: var(--secondary);
-            text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
-            animation: fadeIn 2s ease-in-out;
-        }
-
-        nav {
-            background: white;
-            padding: 1rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            border-bottom: 3px solid var(--secondary);
-        }
-
-        nav a {
-            text-decoration: none;
-            color: var(--text-dark);
-            font-weight: 500;
-            padding: 8px 16px;
-            border-radius: 20px;
-            transition: all 0.3s;
-        }
-
-        nav a:hover {
-            background: var(--secondary);
-            color: var(--text-dark);
-        }
-
-        .container {
-            max-width: 1000px;
-            margin: 3rem auto;
-            padding: 0 20px;
-        }
-
-        .card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 2.5rem;
-            margin-bottom: 3rem;
-            box-shadow: 0 8px 32px rgba(201, 42, 42, 0.08);
-            border: 1px solid rgba(245, 176, 65, 0.3);
-            transform: translateY(20px);
-            opacity: 0;
-            animation: slideUp 0.8s forwards ease-out;
-        }
-
-        h2 {
-            font-family: 'Playfair Display', serif;
-            color: var(--primary);
-            font-size: 2.5rem;
-            text-align: center;
-            margin-top: 0;
-        }
-
-        /* --- THE CONTINENTAL TIMELINE --- */
-        .timeline-container {
-            position: relative;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px 0;
-        }
-        
-        .timeline-container::after {
-            content: '';
-            position: absolute;
-            width: 4px;
-            background: rgba(245, 176, 65, 0.4); 
-            top: 0;
-            bottom: 0;
-            left: 50%;
-            margin-left: -2px;
-            border-radius: 2px;
-        }
-
-        .timeline-step {
-            padding: 10px 40px;
-            position: relative;
-            background-color: inherit;
-            width: 50%;
-            box-sizing: border-box;
-        }
-
+        .timeline-container { position: relative; max-width: 800px; margin: 0 auto; padding: 20px 0; }
+        .timeline-container::after { content: ''; position: absolute; width: 4px; background: rgba(245, 176, 65, 0.4); top: 0; bottom: 0; left: 50%; margin-left: -2px; border-radius: 2px; }
+        .timeline-step { padding: 10px 40px; position: relative; background-color: inherit; width: 50%; box-sizing: border-box; }
         .timeline-step:nth-child(odd) { left: 0; text-align: right; }
         .timeline-step:nth-child(even) { left: 50%; }
-
-        .timeline-marker {
-            position: absolute;
-            width: 40px;
-            height: 40px;
-            right: -20px;
-            background-color: var(--primary);
-            border: 4px solid #fff;
-            border-radius: 50%;
-            top: 15px;
-            z-index: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-
+        .timeline-marker { position: absolute; width: 40px; height: 40px; right: -20px; background-color: var(--primary); border: 4px solid #fff; border-radius: 50%; top: 15px; z-index: 1; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         .timeline-step:nth-child(even) .timeline-marker { left: -20px; }
-
-        .timeline-content {
-            padding: 20px;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            border: 1px solid rgba(201, 42, 42, 0.1);
-        }
-        
+        .timeline-content { padding: 20px; background: white; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid rgba(201, 42, 42, 0.1); }
         .timeline-content h3 { margin: 0 0 10px 0; color: var(--primary); font-family: 'Playfair Display', serif; }
         .timeline-content p { margin: 0; font-size: 0.95rem; color: #555; }
 
-        /* --- UPLOAD ZONE & FORMS --- */
-        .upload-zone {
-            border: 2px dashed var(--secondary);
-            border-radius: 15px;
-            padding: 2rem;
-            text-align: center;
-            background: rgba(245, 176, 65, 0.1);
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
+        .upload-zone { border: 2px dashed var(--secondary); border-radius: 15px; padding: 2rem; text-align: center; background: rgba(245, 176, 65, 0.1); cursor: pointer; transition: all 0.3s; }
         .upload-zone:hover { background: rgba(245, 176, 65, 0.2); }
-
-        input[type="text"], textarea {
-            width: 100%; padding: 15px; margin: 10px 0; border-radius: 10px;
-            border: 1px solid #ddd; font-family: inherit; box-sizing: border-box; background: #fff;
-        }
-
-        button {
-            background-color: var(--primary); color: white; border: none; padding: 15px 30px;
-            font-size: 1.1rem; border-radius: 30px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
-            width: 100%; font-family: inherit; margin-top: 15px; font-weight: 500;
-        }
-
+        input[type="text"], textarea { width: 100%; padding: 15px; margin: 10px 0; border-radius: 10px; border: 1px solid #ddd; font-family: inherit; box-sizing: border-box; background: #fff; }
+        button { background-color: var(--primary); color: white; border: none; padding: 15px 30px; font-size: 1.1rem; border-radius: 30px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; width: 100%; font-family: inherit; margin-top: 15px; font-weight: 500; }
         button:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(201, 42, 42, 0.3); background-color: #b02525; }
         button:disabled { background-color: #ccc; cursor: not-allowed; transform: none; box-shadow: none; }
 
-        .privacy-toggle {
-            display: flex; justify-content: center; gap: 20px; margin: 20px 0; padding: 15px;
-            background: #fff8eb; border-radius: 10px; border: 1px solid rgba(245, 176, 65, 0.3);
-        }
-
+        .privacy-toggle { display: flex; justify-content: center; gap: 20px; margin: 20px 0; padding: 15px; background: #fff8eb; border-radius: 10px; border: 1px solid rgba(245, 176, 65, 0.3); }
         .privacy-toggle label { display: flex; align-items: center; gap: 8px; cursor: pointer; }
 
-        .preview-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; margin-top: 15px;
-        }
-        .preview-grid img, .preview-grid video {
-            width: 100px; height: 100px; object-fit: cover; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
+        .preview-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; margin-top: 15px; }
+        .preview-grid img, .preview-grid video { width: 100px; height: 100px; object-fit: cover; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
 
-        /* --- THE POLAROID SCRAPBOOK --- */
-        .gallery-grid {
-            display: flex; flex-wrap: wrap; justify-content: center; gap: 25px; padding: 20px 0;
-        }
-
-        .polaroid-card {
-            background: #fff; padding: 12px 12px 25px 12px; border-radius: 4px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.12); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            width: 260px; cursor: pointer; position: relative;
-        }
-
+        .gallery-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 25px; padding: 20px 0; }
+        .polaroid-card { background: #fff; padding: 12px 12px 25px 12px; border-radius: 4px; box-shadow: 0 8px 20px rgba(0,0,0,0.12); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); width: 260px; cursor: pointer; position: relative; }
         .polaroid-card:nth-child(odd) { transform: rotate(-3deg); }
         .polaroid-card:nth-child(even) { transform: rotate(4deg); }
         .polaroid-card:nth-child(3n) { transform: rotate(-2deg); }
+        .polaroid-card:hover { transform: scale(1.1) rotate(0deg) translateY(-10px) !important; box-shadow: 0 15px 35px rgba(201, 42, 42, 0.25); z-index: 10; }
 
-        .polaroid-card:hover {
-            transform: scale(1.1) rotate(0deg) translateY(-10px) !important;
-            box-shadow: 0 15px 35px rgba(201, 42, 42, 0.25); z-index: 10;
-        }
-/* --- VEDIC COSMIC EMBERS (BACKGROUND ANIMATION) --- */
-        .sparks-container {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            z-index: -1; /* Locks it behind everything else */
-            overflow: hidden;
-            pointer-events: none; /* Guests can't accidentally click them */
-        }
+        /* --- LIGHTBOX --- */
+        .lightbox { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.95); z-index: 2000; display: none; flex-direction: column; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease; backdrop-filter: blur(10px); }
+        .lightbox.active { opacity: 1; display: flex !important; }
+        .lightbox-content { max-width: 90vw; max-height: 85vh; position: relative; display: flex; flex-direction: column; align-items: center; }
+        .lightbox-content img, .lightbox-content video { max-width: 100%; max-height: 70vh; border-radius: 8px; box-shadow: 0 4px 25px rgba(0,0,0,0.5); border: 2px solid rgba(255,255,255,0.2); }
+        .close-lightbox { position: absolute; top: 20px; right: 30px; color: white; font-size: 3rem; cursor: pointer; transition: 0.2s; z-index: 2001; }
+        .close-lightbox:hover { color: var(--secondary); transform: scale(1.1); }
+        .lightbox-actions { margin-top: 20px; width: 100%; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.1); padding: 15px 25px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); }
+        #like-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: white; width: auto; border-radius: 30px; padding: 10px 25px; font-size: 1.2rem; display: flex; align-items: center; gap: 8px; margin: 0; cursor: pointer; transition: 0.3s; }
+        #like-btn:hover { background: rgba(201, 42, 42, 0.9); transform: scale(1.05); }
+        #lightbox-caption { color: white; font-size: 1.1rem; }
+        #lightbox-caption strong { color: var(--secondary); font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-right: 10px;}
+        .mini-like-badge { position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.9); padding: 5px 10px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.1); color: var(--primary); z-index: 5; }
 
-        .spark {
-            position: absolute;
-            background: radial-gradient(circle, rgba(245, 176, 65, 0.6) 0%, rgba(245, 176, 65, 0) 70%);
-            border-radius: 50%;
-            opacity: 0;
-            animation: floatUp infinite linear;
-        }
-
-        /* 7 unique sparks with different sizes, speeds, and positions */
+        /* --- SPARKS BACKGROUND --- */
+        .sparks-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; overflow: hidden; pointer-events: none; }
+        .spark { position: absolute; background: radial-gradient(circle, rgba(245, 176, 65, 0.6) 0%, rgba(245, 176, 65, 0) 70%); border-radius: 50%; opacity: 0; animation: floatUp infinite linear; }
         .spark:nth-child(1) { width: 12px; height: 12px; left: 10%; animation-duration: 16s; animation-delay: 0s; }
         .spark:nth-child(2) { width: 25px; height: 25px; left: 30%; animation-duration: 22s; animation-delay: 4s; }
         .spark:nth-child(3) { width: 15px; height: 15px; left: 60%; animation-duration: 18s; animation-delay: 2s; }
@@ -299,13 +90,7 @@
         .spark:nth-child(6) { width: 8px; height: 8px; left: 90%; animation-duration: 14s; animation-delay: 1s; }
         .spark:nth-child(7) { width: 22px; height: 22px; left: 20%; animation-duration: 24s; animation-delay: 5s; }
 
-        @keyframes floatUp {
-            0% { bottom: -10%; transform: translateX(0) scale(0.8); opacity: 0; }
-            20% { opacity: 0.6; }
-            50% { transform: translateX(25px) scale(1.2); }
-            80% { opacity: 0.6; }
-            100% { bottom: 110%; transform: translateX(-25px) scale(0.8); opacity: 0; }
-        }
+        @keyframes floatUp { 0% { bottom: -10%; transform: translateX(0) scale(0.8); opacity: 0; } 20% { opacity: 0.6; } 50% { transform: translateX(25px) scale(1.2); } 80% { opacity: 0.6; } 100% { bottom: 110%; transform: translateX(-25px) scale(0.8); opacity: 0; } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideUp { to { transform: translateY(0); opacity: 1; } }
 
@@ -316,40 +101,37 @@
             .timeline-step:nth-child(odd) { text-align: left; }
             .timeline-marker { left: 11px !important; }
             .privacy-toggle { flex-direction: column; align-items: flex-start; }
+            .lightbox-actions { flex-direction: column; gap: 15px; text-align: center; }
         }
     </style>
 </head>
 <body>
-<div class="sparks-container">
-        <div class="spark"></div>
-        <div class="spark"></div>
-        <div class="spark"></div>
-        <div class="spark"></div>
-        <div class="spark"></div>
-        <div class="spark"></div>
-        <div class="spark"></div>
+    
+    <div class="sparks-container">
+        <div class="spark"></div><div class="spark"></div><div class="spark"></div>
+        <div class="spark"></div><div class="spark"></div><div class="spark"></div><div class="spark"></div>
     </div>
+
+    <div id="lightbox" class="lightbox">
+        <span class="close-lightbox" onclick="closeLightbox()">&times;</span>
+        <div class="lightbox-content">
+            <div id="lightbox-media-container"></div>
+            <div class="lightbox-actions">
+                <button id="like-btn" onclick="likeMedia()">❤️ <span id="like-count">0</span></button>
+                <div id="lightbox-caption"></div>
+            </div>
+        </div>
+    </div>
+
     <header>
         <h1>Sreevathsav & Susmitha</h1>
         <div class="subtitle">April 23, 2026 • A Vedic Celebration of Love</div>
         
         <div id="countdown" class="countdown-container">
-            <div class="countdown-box">
-                <span id="days" class="countdown-number">00</span>
-                <span class="countdown-label">Days</span>
-            </div>
-            <div class="countdown-box">
-                <span id="hours" class="countdown-number">00</span>
-                <span class="countdown-label">Hours</span>
-            </div>
-            <div class="countdown-box">
-                <span id="minutes" class="countdown-number">00</span>
-                <span class="countdown-label">Mins</span>
-            </div>
-            <div class="countdown-box">
-                <span id="seconds" class="countdown-number">00</span>
-                <span class="countdown-label">Secs</span>
-            </div>
+            <div class="countdown-box"><span id="days" class="countdown-number">00</span><span class="countdown-label">Days</span></div>
+            <div class="countdown-box"><span id="hours" class="countdown-number">00</span><span class="countdown-label">Hours</span></div>
+            <div class="countdown-box"><span id="minutes" class="countdown-number">00</span><span class="countdown-label">Mins</span></div>
+            <div class="countdown-box"><span id="seconds" class="countdown-number">00</span><span class="countdown-label">Secs</span></div>
         </div>
     </header>
 
@@ -361,7 +143,6 @@
     </nav>
 
     <div class="container">
-        
         <div id="journey" class="card" style="animation-delay: 0.1s;">
             <h2>Our Journey</h2>
             <div class="timeline-container">
@@ -406,8 +187,8 @@
         </div>
 
         <div id="upload" class="card" style="animation-delay: 0.2s;">
-            <h2>Share Photos & Videos</h2>
-            <p style="text-align: center;">Upload your favorite moments from the festivities.</p>
+            <h2>Share Photos & Blessings</h2>
+            <p style="text-align: center;">Upload a photo, or just leave a heartfelt message for us.</p>
             
             <form id="mediaForm">
                 <input type="text" id="mediaName" placeholder="Your Name" required>
@@ -418,14 +199,14 @@
                 </div>
 
                 <div class="upload-zone" onclick="document.getElementById('mediaInput').click()">
-                    <h3>🌺 Tap or Drag Files Here</h3>
-                    <p>Supports Photos (.jpg, .png) & Videos (.mp4, .mov)</p>
+                    <h3>🌺 Tap or Drag Photos/Videos Here</h3>
+                    <p>(Optional) Share a visual memory with your blessing.</p>
                 </div>
                 <input type="file" id="mediaInput" accept="image/*,video/*" multiple style="display: none;">
                 
                 <div id="mediaPreview" class="preview-grid"></div>
                 
-                <textarea id="mediaCaption" rows="2" placeholder="Add a blessing or message..."></textarea>
+                <textarea id="mediaCaption" rows="2" placeholder="Add your blessing or message here..."></textarea>
                 <button type="submit" id="mediaSubmitBtn">Upload Memories</button>
             </form>
         </div>
@@ -449,31 +230,25 @@
 
         <div id="gallery" class="card" style="animation-delay: 0.6s;">
             <h2>The Gallery</h2>
-            <p style="text-align: center;">Shared memories from our loved ones.</p>
-            <div class="gallery-grid">
-                </div>
+            <p style="text-align: center;">Shared memories and blessings from our loved ones.</p>
+            <div class="gallery-grid" id="main-gallery"></div>
+            
+            <h3 style="text-align: center; margin-top: 50px; color: var(--secondary); font-family: 'Playfair Display', serif; font-size: 2rem;">Voice Blessings</h3>
+            <div class="gallery-grid" id="audio-gallery"></div>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, serverTimestamp, query, orderBy, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, serverTimestamp, query, orderBy, where, onSnapshot, doc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
         import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-storage.js";
 
-        const firebaseConfig = {
-          apiKey: "AIzaSyBRR2elLneGSivN4-8fqyf9QdV6U3uzWWQ",
-          authDomain: "ourlovelywedding-53662.firebaseapp.com",
-          projectId: "ourlovelywedding-53662",
-          storageBucket: "ourlovelywedding-53662.firebasestorage.app",
-          messagingSenderId: "711916877913",
-          appId: "1:711916877913:web:315706a6eaa64e408d1948"
-        };
-
+        const firebaseConfig = { apiKey: "AIzaSyBRR2elLneGSivN4-8fqyf9QdV6U3uzWWQ", authDomain: "ourlovelywedding-53662.firebaseapp.com", projectId: "ourlovelywedding-53662", storageBucket: "ourlovelywedding-53662.firebasestorage.app", messagingSenderId: "711916877913", appId: "1:711916877913:web:315706a6eaa64e408d1948" };
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const storage = getStorage(app);
 
-        // --- Photo/Video Upload ---
+        // --- Photo/Text Upload ---
         const mediaInput = document.getElementById('mediaInput');
         const mediaPreview = document.getElementById('mediaPreview');
         let selectedFiles = [];
@@ -481,180 +256,137 @@
         mediaInput.addEventListener('change', function() {
             mediaPreview.innerHTML = ''; 
             selectedFiles = Array.from(this.files);
-            selectedFiles.forEach(file => {
+            selectedFiles.forEach(f => {
                 const reader = new FileReader();
-                reader.onload = function(e) {
-                    if (file.type.startsWith('image/')) {
-                        const img = document.createElement('img');
-                        img.src = e.target.result;
-                        mediaPreview.appendChild(img);
-                    } else if (file.type.startsWith('video/')) {
-                        const video = document.createElement('video');
-                        video.src = e.target.result;
-                        video.muted = true;
-                        mediaPreview.appendChild(video);
-                    }
+                reader.onload = e => {
+                    const el = document.createElement(f.type.startsWith('image/') ? 'img' : 'video');
+                    el.src = e.target.result; if(el.tagName==='VIDEO') el.muted=true;
+                    mediaPreview.appendChild(el);
                 }
-                reader.readAsDataURL(file);
+                reader.readAsDataURL(f);
             });
         });
 
         document.getElementById('mediaForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
-            const uploaderName = document.getElementById('mediaName').value;
+            const name = document.getElementById('mediaName').value;
             const caption = document.getElementById('mediaCaption').value;
             const isPrivate = document.querySelector('input[name="privacy"]:checked').value === 'private';
             
-            // 🛑 NEW CHECK: Make sure they provided EITHER a file OR a text message
-            if (selectedFiles.length === 0 && caption.trim() === "") {
-                return alert("Please select a photo/video, or write a blessing in the text box!");
-            }
+            if (selectedFiles.length === 0 && caption.trim() === "") return alert("Please add a photo or write a blessing!");
 
             const submitBtn = document.getElementById('mediaSubmitBtn');
-            submitBtn.innerText = "Saving... Please wait";
-            submitBtn.disabled = true;
+            submitBtn.innerText = "Saving..."; submitBtn.disabled = true;
 
             try {
-                // If they attached files (Photos/Videos)
                 if (selectedFiles.length > 0) {
                     for (const file of selectedFiles) {
-                        const storageRef = ref(storage, `wedding_uploads/${Date.now()}_${file.name}`);
-                        const uploadTask = await uploadBytesResumable(storageRef, file);
-                        const downloadURL = await getDownloadURL(uploadTask.ref);
-
-                        await addDoc(collection(db, "guest_memories"), {
-                            name: uploaderName, caption: caption, isPrivate: isPrivate,
-                            fileUrl: downloadURL, fileType: file.type, timestamp: serverTimestamp()
-                        });
+                        const sRef = ref(storage, `wedding_uploads/${Date.now()}_${file.name}`);
+                        const url = await getDownloadURL((await uploadBytesResumable(sRef, file)).ref);
+                        await addDoc(collection(db, "guest_memories"), { name, caption, isPrivate, fileUrl: url, fileType: file.type, likes: 0, timestamp: serverTimestamp() });
                     }
                 } else {
-                    // 📝 NEW: TEXT-ONLY BLESSING
-                    await addDoc(collection(db, "guest_memories"), {
-                        name: uploaderName, caption: caption, isPrivate: isPrivate,
-                        fileUrl: null, fileType: 'text', timestamp: serverTimestamp()
-                    });
+                    await addDoc(collection(db, "guest_memories"), { name, caption, isPrivate, fileUrl: null, fileType: 'text', likes: 0, timestamp: serverTimestamp() });
                 }
-
-                alert(isPrivate ? "Saved securely to your private vault!" : "Added to the gallery!");
-                e.target.reset();
-                mediaPreview.innerHTML = '';
-                selectedFiles = [];
-            } catch (error) {
-                console.error("Upload failed", error);
-                alert("Upload failed. Please try again.");
-            } finally {
-                submitBtn.innerText = "Upload Memories";
-                submitBtn.disabled = false;
-            }
+                alert(isPrivate ? "Saved to your private vault!" : "Added to the gallery!");
+                e.target.reset(); mediaPreview.innerHTML = ''; selectedFiles = [];
+            } catch (err) { alert("Upload failed."); } finally { submitBtn.innerText = "Upload Memories"; submitBtn.disabled = false; }
         });
-        
+
         // --- Voice Notes ---
-        let mediaRecorder, audioChunks = [], finalAudioBlob = null;
-        const recordBtn = document.getElementById('recordBtn'), stopBtn = document.getElementById('stopBtn');
-        const audioPlayback = document.getElementById('audioPlayback'), uploadAudioBtn = document.getElementById('uploadAudioBtn');
-
-        recordBtn.addEventListener('click', async () => {
+        let mRec, aChunks = [], aBlob = null;
+        document.getElementById('recordBtn').onclick = async () => {
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                mediaRecorder = new MediaRecorder(stream);
-                mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
-                mediaRecorder.onstop = () => {
-                    finalAudioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-                    audioPlayback.src = URL.createObjectURL(finalAudioBlob);
-                    audioPlayback.style.display = 'block';
-                    uploadAudioBtn.style.display = 'block';
-                    audioChunks = [];
+                mRec = new MediaRecorder(await navigator.mediaDevices.getUserMedia({ audio: true }));
+                mRec.ondataavailable = e => aChunks.push(e.data);
+                mRec.onstop = () => {
+                    aBlob = new Blob(aChunks, { type: 'audio/webm' });
+                    document.getElementById('audioPlayback').src = URL.createObjectURL(aBlob);
+                    document.getElementById('audioPlayback').style.display = 'block';
+                    document.getElementById('uploadAudioBtn').style.display = 'block'; aChunks = [];
                 };
-                mediaRecorder.start();
-                recordBtn.style.display = 'none'; stopBtn.style.display = 'block';
-            } catch (err) { alert("Microphone access is required."); }
-        });
-
-        stopBtn.addEventListener('click', () => {
-            mediaRecorder.stop();
-            mediaRecorder.stream.getTracks().forEach(t => t.stop());
-            stopBtn.style.display = 'none'; recordBtn.style.display = 'block'; recordBtn.innerText = '⏺ Re-record';
-        });
-
-        uploadAudioBtn.addEventListener('click', async () => {
-            if (!finalAudioBlob) return;
-            const guestName = document.getElementById('audioName').value;
-            if (!guestName) return alert("Please enter your name!");
-            uploadAudioBtn.innerText = "Sending..."; uploadAudioBtn.disabled = true;
+                mRec.start(); document.getElementById('recordBtn').style.display = 'none'; document.getElementById('stopBtn').style.display = 'block';
+            } catch (err) { alert("Mic required."); }
+        };
+        document.getElementById('stopBtn').onclick = () => { mRec.stop(); mRec.stream.getTracks().forEach(t=>t.stop()); document.getElementById('stopBtn').style.display = 'none'; document.getElementById('recordBtn').style.display = 'block'; document.getElementById('recordBtn').innerText = '⏺ Re-record'; };
+        document.getElementById('uploadAudioBtn').onclick = async () => {
+            if (!aBlob) return;
+            const name = document.getElementById('audioName').value;
+            if (!name) return alert("Enter your name!");
+            const btn = document.getElementById('uploadAudioBtn'); btn.innerText = "Sending..."; btn.disabled = true;
             try {
-                const storageRef = ref(storage, `voice_notes/${Date.now()}_${guestName}.webm`);
-                const uploadTask = await uploadBytesResumable(storageRef, finalAudioBlob);
-                const downloadURL = await getDownloadURL(uploadTask.ref);
-                await addDoc(collection(db, "voice_notes"), {
-                    name: guestName,
-                    isPrivate: document.querySelector('input[name="audio_privacy"]:checked').value === 'private',
-                    audioUrl: downloadURL, timestamp: serverTimestamp()
-                });
-                alert("Voice note sent!");
-                audioPlayback.style.display = 'none'; uploadAudioBtn.style.display = 'none';
-                recordBtn.innerText = '⏺ Start Recording'; finalAudioBlob = null;
-            } catch (error) { alert("Failed to send."); } finally {
-                uploadAudioBtn.innerText = "Send Voice Note"; uploadAudioBtn.disabled = false;
-            }
-        });
+                const url = await getDownloadURL((await uploadBytesResumable(ref(storage, `voice_notes/${Date.now()}.webm`), aBlob)).ref);
+                await addDoc(collection(db, "voice_notes"), { name, isPrivate: document.querySelector('input[name="audio_privacy"]:checked').value === 'private', audioUrl: url, timestamp: serverTimestamp() });
+                alert("Voice note sent!"); document.getElementById('audioPlayback').style.display = 'none'; btn.style.display = 'none'; document.getElementById('recordBtn').innerText = '⏺ Start Recording'; aBlob = null;
+            } catch (err) { alert("Failed."); } finally { btn.innerText = "Send Voice Note"; btn.disabled = false; }
+        };
 
-        // --- Live Gallery Feed ---
-        const galleryGrid = document.querySelector('.gallery-grid');
-        const memoriesQuery = query(collection(db, "guest_memories"), where("isPrivate", "==", false), orderBy("timestamp", "desc"));
-        
-        onSnapshot(memoriesQuery, (snapshot) => {
-            galleryGrid.innerHTML = ''; 
-            if (snapshot.empty) {
-                galleryGrid.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: #777;">No memories shared yet. Be the first!</p>';
-                return;
-            }
-            snapshot.forEach((doc) => {
-                const data = doc.data();
-                const mediaElement = document.createElement('div');
-                mediaElement.className = 'polaroid-card'; 
+        // --- Live Main Gallery & Lightbox ---
+        const mainGrid = document.getElementById('main-gallery');
+        onSnapshot(query(collection(db, "guest_memories"), where("isPrivate", "==", false), orderBy("timestamp", "desc")), (snap) => {
+            mainGrid.innerHTML = ''; 
+            if (snap.empty) return mainGrid.innerHTML = '<p style="color:#777;">No memories shared yet.</p>';
+            
+            snap.forEach((doc) => {
+                const d = doc.data(); const id = doc.id; const likes = d.likes || 0;
+                const el = document.createElement('div'); el.className = 'polaroid-card'; 
+                el.onclick = () => window.openLightbox(id, d.fileUrl, d.fileType, d.name, d.caption, likes);
 
-                let mediaContent = data.fileType && data.fileType.startsWith('video/') 
-                    ? `<video src="${data.fileUrl}" controls style="width: 100%; height: 200px; object-fit: cover; border-radius: 2px;"></video>` 
-                    : `<img src="${data.fileUrl}" alt="Wedding Memory" style="width: 100%; height: 200px; object-fit: cover; border-radius: 2px;">`;
+                let content = '';
+                if (d.fileType === 'text') content = `<div style="height:200px; display:flex; align-items:center; justify-content:center; background:#fff8eb; border-radius:2px; padding:15px; border: 1px solid rgba(245, 176, 65, 0.4);"><p style="font-family:'Playfair Display',serif; font-style:italic; color:var(--primary);">"${d.caption}"</p></div>`;
+                else if (d.fileType?.startsWith('video/')) content = `<video src="${d.fileUrl}" style="width:100%; height:200px; object-fit:cover; border-radius:2px;"></video>`;
+                else content = `<img src="${d.fileUrl}" style="width:100%; height:200px; object-fit:cover; border-radius:2px;">`;
 
-                const captionHTML = `
-                    <div style="margin-top: 12px; text-align: center;">
-                        <strong style="color: var(--text-dark); font-family: 'Playfair Display', serif; font-size: 1.1rem;">${data.name}</strong>
-                        ${data.caption ? `<p style="margin: 5px 0 0 0; color: #777; font-size: 0.85rem;">${data.caption}</p>` : ''}
-                    </div>
-                `;
-                mediaElement.innerHTML = mediaContent + captionHTML;
-                galleryGrid.appendChild(mediaElement);
+                el.innerHTML = content + `<div style="margin-top:12px; text-align:center;"><strong style="font-family:'Playfair Display'; font-size:1.1rem;">${d.name}</strong>${d.fileType !== 'text' && d.caption ? `<p style="margin:5px 0 0; color:#777; font-size:0.85rem;">${d.caption}</p>` : ''}</div>` + (likes > 0 ? `<div class="mini-like-badge">❤️ ${likes}</div>` : '');
+                mainGrid.appendChild(el);
             });
         });
+
+        // --- Live Audio Gallery ---
+        const audioGrid = document.getElementById('audio-gallery');
+        onSnapshot(query(collection(db, "voice_notes"), where("isPrivate", "==", false), orderBy("timestamp", "desc")), (snap) => {
+            audioGrid.innerHTML = ''; 
+            if (snap.empty) return audioGrid.innerHTML = '<p style="color:#777;">No voice notes yet.</p>';
+            snap.forEach((doc) => {
+                const d = doc.data(); const el = document.createElement('div'); el.className = 'polaroid-card'; 
+                el.innerHTML = `<div style="height:120px; display:flex; flex-direction:column; align-items:center; justify-content:center; background:#fffaf0; border-radius:2px; padding:15px; border: 1px solid #ddd;"><span style="font-size:2rem; margin-bottom:10px;">🎙️</span><audio src="${d.audioUrl}" controls style="width:100%; height:35px;"></audio></div><div style="margin-top:12px; text-align:center;"><strong style="font-family:'Playfair Display';">${d.name}</strong></div>`;
+                audioGrid.appendChild(el);
+            });
+        });
+
+        // --- Lightbox Window Functions ---
+        window.currentLbId = null;
+        window.openLightbox = (id, url, type, name, caption, likes) => {
+            window.currentLbId = id;
+            const container = document.getElementById('lightbox-media-container');
+            if (type === 'text') container.innerHTML = `<div style="padding: 40px; max-width: 500px; background: #fff8eb; border-radius: 8px; text-align: center;"><p style="font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--primary); font-style: italic;">"${caption}"</p></div>`;
+            else if (type?.startsWith('video/')) container.innerHTML = `<video src="${url}" controls autoplay></video>`;
+            else container.innerHTML = `<img src="${url}">`;
+            
+            document.getElementById('lightbox-caption').innerHTML = `<strong>${name}</strong> ${type !== 'text' && caption ? `<span>${caption}</span>` : ''}`;
+            document.getElementById('like-count').innerText = likes;
+            document.getElementById('lightbox').classList.add('active');
+        };
+        window.closeLightbox = () => { document.getElementById('lightbox').classList.remove('active'); document.getElementById('lightbox-media-container').innerHTML = ''; };
+        window.likeMedia = async () => {
+            if (!window.currentLbId) return;
+            document.getElementById('like-btn').style.transform = 'scale(1.2)'; setTimeout(() => document.getElementById('like-btn').style.transform = 'scale(1.05)', 200);
+            document.getElementById('like-count').innerText = parseInt(document.getElementById('like-count').innerText) + 1;
+            await updateDoc(doc(db, "guest_memories", window.currentLbId), { likes: increment(1) }).catch(e => console.error(e));
+        };
     </script>
 
     <script>
         const targetDate = new Date("April 23, 2026 08:08:00 GMT+0530").getTime();
-
-        const countdownTimer = setInterval(() => {
-            const daysEl = document.getElementById("days");
-            const hoursEl = document.getElementById("hours");
-            const minutesEl = document.getElementById("minutes");
-            const secondsEl = document.getElementById("seconds");
-            const countdownContainer = document.getElementById("countdown");
-
-            if (!daysEl || !hoursEl || !minutesEl || !secondsEl || !countdownContainer) return; 
-
-            const now = new Date().getTime();
-            const distance = targetDate - now;
-
-            if (distance < 0) {
-                clearInterval(countdownTimer);
-                countdownContainer.innerHTML = "<div class='just-married-msg'>Happily Married! 🌺</div>";
-                return;
-            }
-
-            daysEl.innerText = Math.floor(distance / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
-            hoursEl.innerText = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
-            minutesEl.innerText = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
-            secondsEl.innerText = Math.floor((distance % (1000 * 60)) / 1000).toString().padStart(2, '0');
+        setInterval(() => {
+            const els = ['days','hours','minutes','seconds','countdown'].map(id => document.getElementById(id));
+            if (els.some(el => !el)) return;
+            const dist = targetDate - new Date().getTime();
+            if (dist < 0) return els[4].innerHTML = "<div class='just-married-msg'>Happily Married! 🌺</div>";
+            els[0].innerText = Math.floor(dist / 86400000).toString().padStart(2, '0');
+            els[1].innerText = Math.floor((dist % 86400000) / 3600000).toString().padStart(2, '0');
+            els[2].innerText = Math.floor((dist % 3600000) / 60000).toString().padStart(2, '0');
+            els[3].innerText = Math.floor((dist % 60000) / 1000).toString().padStart(2, '0');
         }, 1000);
     </script>
 </body>
