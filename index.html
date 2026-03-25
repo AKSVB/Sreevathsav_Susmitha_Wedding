@@ -46,33 +46,34 @@
         .timeline-content h3 { margin: 0 0 10px 0; color: var(--primary); font-family: 'Playfair Display', serif; }
         .timeline-content p { margin: 0; font-size: 0.95rem; color: #555; }
 
-        /* --- 🎨 NEW: BAPU ART ZIG-ZAG SPACERS --- */
+        /* --- 🎨 BAPU ART ZIG-ZAG SPACERS --- */
         .bapu-spacer {
-            display: block;
-            width: 90%;
-            max-width: 450px; /* Big and beautiful */
-            margin: 0 auto 3rem auto; /* Creates space between the glass cards */
-            border-radius: 12px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
-            border: 3px solid var(--secondary);
-            transition: transform 0.4s ease;
-            position: relative;
-            z-index: 2; /* Sits proudly on top */
+            display: block; width: 90%; max-width: 450px; margin: 0 auto 3rem auto; 
+            border-radius: 12px; box-shadow: 0 15px 35px rgba(0,0,0,0.4); 
+            border: 3px solid var(--secondary); transition: transform 0.4s ease; 
+            position: relative; z-index: 2; 
         }
         .bapu-spacer:hover { transform: scale(1.05) rotate(0deg) !important; }
 
-        /* DESKTOP ZIG-ZAG EFFECT */
         @media (min-width: 900px) {
-            .spacer-left {
-                margin-left: 0; /* Pushes to the left side */
-                margin-right: auto;
-                transform: rotate(-3deg);
-            }
-            .spacer-right {
-                margin-right: 0; /* Pushes to the right side */
-                margin-left: auto;
-                transform: rotate(3deg);
-            }
+            .spacer-left { margin-left: 0; margin-right: auto; transform: rotate(-3deg); }
+            .spacer-right { margin-right: 0; margin-left: auto; transform: rotate(3deg); }
+        }
+
+        /* --- 🪔 THE GRAND PATTABHISHEKAM FOOTER --- */
+        .pattabhishekam-footer {
+            width: 100%;
+            max-width: 1200px; /* Let it be grand and wide */
+            display: block;
+            margin: 4rem auto 2rem auto;
+            padding: 0 20px;
+            box-sizing: border-box;
+            mix-blend-mode: multiply; /* Magically erases the white background to blend with the cream! */
+            opacity: 0.95;
+            transition: transform 0.5s ease;
+        }
+        .pattabhishekam-footer:hover {
+            transform: scale(1.02);
         }
 
         .upload-zone { border: 2px dashed var(--secondary); border-radius: 15px; padding: 2rem; text-align: center; background: rgba(245, 176, 65, 0.1); cursor: pointer; transition: all 0.3s; }
@@ -262,6 +263,8 @@
 
         <img src="page_15_enhanced.png" class="bapu-spacer spacer-right" alt="Bapu Art Rituals" style="margin-bottom: 2rem;">
     </div>
+
+    <img src="Sita_Rama_Pattabhishekam.jpg" class="pattabhishekam-footer" alt="Sita Rama Pattabhishekam Blessing">
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
