@@ -501,39 +501,54 @@
 
         document.getElementById('mediaForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            if (selectedFiles.length === 0) return alert("Please select at least one photo or video.");
+            
+            const uploaderName = document.getElementById('mediaName').value;
+            const caption = document.getElementById('mediaCaption').value;
+            const isPrivate = document.querySelector('input[name="privacy"]:checked').value === 'private';
+            
+            // 🛑 NEW CHECK: Make sure they provided EITHER a file OR a text message
+            if (selectedFiles.length === 0 && caption.trim() === "") {
+                return alert("Please select a photo/video, or write a blessing in the text box!");
+            }
 
             const submitBtn = document.getElementById('mediaSubmitBtn');
-            submitBtn.innerText = "Uploading... Please wait";
+            submitBtn.innerText = "Saving... Please wait";
             submitBtn.disabled = true;
 
             try {
-                for (const file of selectedFiles) {
-                    const storageRef = ref(storage, `wedding_uploads/${Date.now()}_${file.name}`);
-                    const uploadTask = await uploadBytesResumable(storageRef, file);
-                    const downloadURL = await getDownloadURL(uploadTask.ref);
+                // If they attached files (Photos/Videos)
+                if (selectedFiles.length > 0) {
+                    for (const file of selectedFiles) {
+                        const storageRef = ref(storage, `wedding_uploads/${Date.now()}_${file.name}`);
+                        const uploadTask = await uploadBytesResumable(storageRef, file);
+                        const downloadURL = await getDownloadURL(uploadTask.ref);
 
+                        await addDoc(collection(db, "guest_memories"), {
+                            name: uploaderName, caption: caption, isPrivate: isPrivate,
+                            fileUrl: downloadURL, fileType: file.type, timestamp: serverTimestamp()
+                        });
+                    }
+                } else {
+                    // 📝 NEW: TEXT-ONLY BLESSING
                     await addDoc(collection(db, "guest_memories"), {
-                        name: document.getElementById('mediaName').value,
-                        caption: document.getElementById('mediaCaption').value,
-                        isPrivate: document.querySelector('input[name="privacy"]:checked').value === 'private',
-                        fileUrl: downloadURL,
-                        fileType: file.type,
-                        timestamp: serverTimestamp()
+                        name: uploaderName, caption: caption, isPrivate: isPrivate,
+                        fileUrl: null, fileType: 'text', timestamp: serverTimestamp()
                     });
                 }
-                alert("Upload successful!");
+
+                alert(isPrivate ? "Saved securely to your private vault!" : "Added to the gallery!");
                 e.target.reset();
                 mediaPreview.innerHTML = '';
                 selectedFiles = [];
             } catch (error) {
-                alert("Upload failed.");
+                console.error("Upload failed", error);
+                alert("Upload failed. Please try again.");
             } finally {
                 submitBtn.innerText = "Upload Memories";
                 submitBtn.disabled = false;
             }
         });
-
+        
         // --- Voice Notes ---
         let mediaRecorder, audioChunks = [], finalAudioBlob = null;
         const recordBtn = document.getElementById('recordBtn'), stopBtn = document.getElementById('stopBtn');
