@@ -46,7 +46,7 @@
         .timeline-content h3 { margin: 0 0 10px 0; color: var(--primary); font-family: 'Playfair Display', serif; }
         .timeline-content p { margin: 0; font-size: 0.95rem; color: #555; }
 
-        /* --- 🌌 NEW: ARUNDHATI STAR LOCATOR --- */
+        /* --- 🌌 ARUNDHATI STAR LOCATOR --- */
         .star-locator-card { background: linear-gradient(135deg, #0d1321 0%, #1a2639 100%); color: #fff; text-align: center; border: 1px solid rgba(245, 176, 65, 0.3); }
         .star-locator-card h2 { color: var(--secondary); }
         .sky-box { width: 100%; height: 280px; background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%); position: relative; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); cursor: crosshair; overflow: hidden; margin-top: 20px; box-shadow: inset 0 0 20px rgba(0,0,0,0.8); }
@@ -241,9 +241,11 @@
                     <label><input type="radio" name="privacy" value="public" checked> 🌐 Add to Gallery</label>
                     <label><input type="radio" name="privacy" value="private"> 🔒 Private</label>
                 </div>
-                <div class="upload-zone" onclick="document.getElementById('mediaInput').click()">
+                
+                <div class="upload-zone" id="dropZone" onclick="document.getElementById('mediaInput').click()">
                     <h3>🌺 Tap or Drag Files Here</h3>
                 </div>
+                
                 <input type="file" id="mediaInput" accept="image/*,video/*" multiple style="display: none;">
                 <div id="mediaPreview" class="preview-grid"></div>
                 <textarea id="mediaCaption" rows="2" placeholder="Add your blessing..."></textarea>
@@ -294,6 +296,32 @@
         const mediaInput = document.getElementById('mediaInput');
         const mediaPreview = document.getElementById('mediaPreview');
         let selectedFiles = [];
+
+        // --- NEW: DRAG AND DROP LOGIC ---
+        const dropZone = document.getElementById('dropZone');
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.style.background = 'rgba(245, 176, 65, 0.3)';
+            dropZone.style.border = '2px dashed var(--primary)';
+        });
+
+        dropZone.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            dropZone.style.background = 'rgba(245, 176, 65, 0.1)';
+            dropZone.style.border = '2px dashed var(--secondary)';
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.style.background = 'rgba(245, 176, 65, 0.1)';
+            dropZone.style.border = '2px dashed var(--secondary)';
+            
+            if (e.dataTransfer.files.length > 0) {
+                mediaInput.files = e.dataTransfer.files; 
+                mediaInput.dispatchEvent(new Event('change')); // Trigger the preview dynamically
+            }
+        });
 
         mediaInput.addEventListener('change', function() {
             mediaPreview.innerHTML = ''; 
@@ -406,7 +434,6 @@
 
         window.revealStarMessage = () => {
             document.getElementById('starMessage').style.display = 'block';
-            // Scroll down slightly so they can read it
             setTimeout(() => {
                 document.getElementById('starMessage').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }, 100);
