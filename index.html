@@ -73,16 +73,7 @@
             .spacer-right { margin-right: -280px; transform: rotate(3deg); }
         }
 
-        /* --- FIXED FOOTER ART SCALING --- */
-        .pattabhishekam-footer { 
-            width: 95%; 
-            max-width: 800px; /* Locked to 800px so it never blows out on desktop */
-            display: block; 
-            margin: 4rem auto 2rem auto; 
-            mix-blend-mode: multiply; 
-            opacity: 0.95; 
-            border-radius: 15px; /* Softer look */
-        }
+        .pattabhishekam-footer { width: 95%; max-width: 800px; display: block; margin: 4rem auto 2rem auto; mix-blend-mode: multiply; opacity: 0.95; border-radius: 15px; }
         
         @keyframes floatUp { 0% { bottom: -10%; opacity: 0; } 20% { opacity: 0.6; } 100% { bottom: 110%; opacity: 0; } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -100,7 +91,9 @@
             <div id="lb-media-box" style="width:100%; height:100%; display:flex; justify-content:center; align-items:center;"></div>
             <button class="lb-nav lb-next" onclick="navLB(1)">›</button>
         </div>
-        <button onclick="likeLB()" style="background:var(--primary); color:white; border:none; padding:10px 25px; border-radius:20px; margin-top:20px; cursor:pointer; font-weight:bold;">❤️ Like (<span id="lb-count">0</span>)</button>
+        <div style="margin-top:20px; color:white;">
+            <button onclick="likeLB()" style="background:var(--primary); color:white; border:none; padding:10px 25px; border-radius:20px; cursor:pointer; font-weight:bold;">❤️ Like (<span id="lb-count">0</span>)</button>
+        </div>
     </div>
 
     <header>
@@ -120,11 +113,11 @@
         <div id="journey" class="card">
             <h2>Our Journey</h2>
             <div class="timeline-container">
-                <div class="timeline-step"><div class="timeline-marker">🕉️</div><div class="timeline-content"><h3>Divine Grace</h3><p>Every beautiful journey begins with a sacred step. Enveloped in the supreme grace of Lord Siddhi Vinayaka and the guiding light of our beloved Guruji, our paths converged. Their infinite blessings remain the cornerstone of our union.</p></div></div>
-                <div class="timeline-step"><div class="timeline-marker">💍</div><div class="timeline-content"><h3>Nischitartham</h3><p><strong>19th February, 2026</strong><br>The elegant beginning of our forever. Surrounded by the warmth of our families, we exchanged promises and sought the first blessings for a lifetime of togetherness.</p></div></div>
-                <div class="timeline-step"><div class="timeline-marker">🟡</div><div class="timeline-content"><h3>Mangala Snanam & Haldi</h3><p><strong>19th April, 2026</strong><br>A vibrant celebration of purity and joy. Bathed in golden turmeric, traditional melodies, and the deep affection of our loved ones, we begin the sacred preparations.</p></div></div>
-                <div class="timeline-step"><div class="timeline-marker">🌿</div><div class="timeline-content"><h3>Snathakam & Edurukolu</h3><p><strong>22nd April, 2026</strong><br>Honoring centuries of tradition. A day marked by the purifying Snathakam rituals, followed by the joyous Edurukolu, where our families playfully welcome the groom with festive warmth.</p></div></div>
-                <div class="timeline-step"><div class="timeline-marker">🪔</div><div class="timeline-content"><h3>The Sacred Muhurtham</h3><p><strong>23rd April, 2026 at 8:08 AM IST</strong><br>Venue: Goteti Kalyana Vedika (Narasimha Hall)<br><a href="https://maps.google.com/?q=Goteti+Kalyana+Vedika+Hyderabad" target="_blank" style="color:var(--primary); font-weight:700; text-decoration:none;">📍 View on Google Maps</a></p></div></div>
+                <div class="timeline-step"><div class="timeline-marker"></div><div class="timeline-content"><h3>Divine Grace</h3><p>Every beautiful journey begins with a sacred step. Enveloped in the supreme grace of Lord Siddhi Vinayaka and the guiding light of our beloved Guruji, our paths converged. Their infinite blessings remain the cornerstone of our union.</p></div></div>
+                <div class="timeline-step"><div class="timeline-marker"></div><div class="timeline-content"><h3>Nischitartham</h3><p><strong>19th February, 2026</strong><br>The elegant beginning of our forever. Surrounded by the warmth of our families, we exchanged promises and sought the first blessings for a lifetime of togetherness.</p></div></div>
+                <div class="timeline-step"><div class="timeline-marker"></div><div class="timeline-content"><h3>Mangala Snanam & Haldi</h3><p><strong>19th April, 2026</strong><br>A vibrant celebration of purity and joy. Bathed in golden turmeric, traditional melodies, and the deep affection of our loved ones, we begin the sacred preparations.</p></div></div>
+                <div class="timeline-step"><div class="timeline-marker"></div><div class="timeline-content"><h3>Snathakam & Edurukolu</h3><p><strong>22nd April, 2026</strong><br>Honoring centuries of tradition. A day marked by the purifying Snathakam rituals, followed by the joyous Edurukolu, where our families playfully welcome the groom with festive warmth.</p></div></div>
+                <div class="timeline-step"><div class="timeline-marker"></div><div class="timeline-content"><h3>The Sacred Muhurtham</h3><p><strong>23rd April, 2026 at 8:08 AM IST</strong><br>Venue: Goteti Kalyana Vedika (Narasimha Hall)<br><a href="https://maps.google.com/?q=Goteti+Kalyana+Vedika+Hyderabad" target="_blank" style="color:var(--primary); font-weight:700; text-decoration:none;">📍 View on Google Maps</a></p></div></div>
             </div>
         </div>
 
@@ -153,7 +146,7 @@
             <input type="file" id="mFile" multiple accept="image/*,video/*" style="display:none;">
             <div id="mPrev" style="display:flex; gap:10px; margin-top:10px; overflow-x:auto;"></div>
             <textarea id="mCap" class="styled-input" rows="3" placeholder="Write a blessing..."></textarea>
-            <button onclick="uploadMedia()" id="mBtn">Upload Memory</button>
+            <button onclick="uploadMedia()" id="mBtn" style="background:var(--primary); color:white; border:none; padding:15px; width:100%; border-radius:30px; font-weight:600; cursor:pointer; margin-top:10px;">Upload Memory</button>
         </div>
 
         <img src="page_14_enhanced.png" class="bapu-spacer spacer-right">
@@ -165,10 +158,10 @@
                 <label><input type="radio" name="aPriv" value="public" checked> 🌐 Public</label>
                 <label><input type="radio" name="aPriv" value="private"> 🔒 Private</label>
             </div>
-            <button id="recBtn" onclick="startRec()" style="background:#555; color:white; padding:15px; width:100%; border-radius:30px; border:none; cursor:pointer;">⏺ Start Recording</button>
-            <button id="stopBtn" onclick="stopRec()" style="display:none; background:var(--primary); color:white; padding:15px; width:100%; border-radius:30px; border:none; cursor:pointer;">⏹ Stop & Save</button>
-            <audio id="aPlay" controls style="width:100%; margin-top:15px; display:none;"></audio>
-            <button id="aBtn" onclick="uploadAudio()" style="display:none; background:var(--primary); color:white; padding:15px; width:100%; border-radius:30px; border:none; cursor:pointer; margin-top:10px;">Send Voice Note</button>
+            <button id="recBtn" onclick="startRec()" style="background:#555; color:white; padding:15px; width:100%; border-radius:30px; border:none; cursor:pointer; font-weight:bold;">⏺ Start Recording</button>
+            <button id="stopBtn" onclick="stopRec()" style="display:none; background:var(--primary); color:white; padding:15px; width:100%; border-radius:30px; border:none; cursor:pointer; font-weight:bold;">⏹ Stop & Save</button>
+            <audio id="aPlay" controls style="width: 100%; margin-top: 15px; display: none;"></audio>
+            <button id="aBtn" onclick="uploadAudio()" style="display:none; background:var(--primary); color:white; padding:15px; width:100%; border-radius:30px; border:none; cursor:pointer; margin-top:10px; font-weight:bold;">Send Voice Note</button>
         </div>
 
         <div id="gallery" class="card">
@@ -177,7 +170,7 @@
         </div>
     </div>
 
-    <img src="Sita_Rama_Pattabhishekam.jpg" class="pattabhishekam-footer" alt="Sita Rama Pattabhishekam Blessing">
+    <img src="Sita_Rama_Pattabhishekam.jpg" class="pattabhishekam-footer">
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
@@ -231,10 +224,10 @@
         };
         window.stopRec = () => { rec.stop(); document.getElementById('stopBtn').style.display='none'; document.getElementById('recBtn').style.display='block'; };
         window.uploadAudio = async () => {
-            const name = document.getElementById('aName').value; if(!name) return alert("Enter Name");
+            const nameInput = document.getElementById('aName').value || "Guest";
             const isPriv = document.querySelector('input[name="aPriv"]:checked').value === 'private';
             const url = await getDownloadURL((await uploadBytesResumable(ref(storage, `voice/${Date.now()}.webm`), blob)).ref);
-            await addDoc(collection(db,"voice_notes"), { name, audioUrl: url, isPrivate: isPriv, likes: 0, timestamp: serverTimestamp() });
+            await addDoc(collection(db,"voice_notes"), { name: nameInput, audioUrl: url, isPrivate: isPriv, likes: 0, timestamp: serverTimestamp() });
             alert("Sent!"); location.reload();
         };
 
@@ -256,8 +249,8 @@
                     });
                     h += `</div>`;
                 }
-                items.filter(i=>i.fileType==='text').forEach(i => { h += `<div class="guest-text-blessing"><button class="like-btn-small" onclick="lT('${i.id}')">❤️ ${i.likes||0}</button>"${i.caption}"</div>`; });
-                items.filter(i=>i.cat==='v').forEach(i => { h += `<div style="margin-bottom:10px;"><button class="like-btn-small" onclick="lV('${i.id}')">❤️ ${i.likes||0}</button><audio src="${i.audioUrl}" controls style="width:80%; height:30px;"></audio></div>`; });
+                items.filter(i=>i.fileType==='text').forEach(i => { h += `<div class="guest-text-blessing"><button class="like-btn-small" onclick="lT('${i.id}')">❤️ <span id="lcnt-${i.id}">${i.likes||0}</span></button>"${i.caption}"</div>`; });
+                items.filter(i=>i.cat==='v').forEach(i => { h += `<div style="margin-bottom:10px;"><button class="like-btn-small" onclick="lV('${i.id}')">❤️ <span id="lcnt-${i.id}">${i.likes||0}</span></button><audio src="${i.audioUrl}" controls style="width:80%; height:30px;"></audio></div>`; });
                 card.innerHTML = h + `</div>`; root.appendChild(card);
             });
         };
@@ -266,7 +259,7 @@
         onSnapshot(query(collection(db,"voice_notes"),orderBy("timestamp","desc")), s => { vData = s.docs.map(d=>({id:d.id, ...d.data()})); render(); });
 
         window.openLB = (id, setStr) => {
-            curSet = JSON.parse(setStr); curIdx = curSet.findIndex(i => i.id === id);
+            curSet = JSON.parse(setStr.replace(/&quot;/g, '"')); curIdx = curSet.findIndex(i => i.id === id);
             updateLB(); document.getElementById('lightbox').classList.add('active');
         };
         window.updateLB = () => {
@@ -275,9 +268,25 @@
         };
         window.navLB = (dir) => { curIdx = (curIdx + dir + curSet.length) % curSet.length; updateLB(); };
         window.closeLB = () => document.getElementById('lightbox').classList.remove('active');
-        window.likeLB = async () => await updateDoc(doc(db,"guest_memories",curSet[curIdx].id),{likes:increment(1)});
-        window.lT = async id => await updateDoc(doc(db,"guest_memories",id),{likes:increment(1)});
-        window.lV = async id => await updateDoc(doc(db,"voice_notes",id),{likes:increment(1)});
+        
+        // --- FIXED LIKE FUNCTIONS ---
+        window.likeLB = async () => {
+            const currentItem = curSet[curIdx];
+            const docRef = doc(db, "guest_memories", currentItem.id);
+            await updateDoc(docRef, { likes: increment(1) });
+            currentItem.likes = (currentItem.likes || 0) + 1;
+            document.getElementById('lb-count').innerText = currentItem.likes;
+        };
+        window.lT = async id => {
+            await updateDoc(doc(db, "guest_memories", id), { likes: increment(1) });
+            const span = document.getElementById('lcnt-' + id);
+            if(span) span.innerText = parseInt(span.innerText) + 1;
+        };
+        window.lV = async id => {
+            await updateDoc(doc(db, "voice_notes", id), { likes: increment(1) });
+            const span = document.getElementById('lcnt-' + id);
+            if(span) span.innerText = parseInt(span.innerText) + 1;
+        };
     </script>
 
     <script>
@@ -288,11 +297,12 @@
             s.style.left = Math.random()*100+'%'; s.style.animationDuration = Math.random()*10+10+'s';
             s.style.animationDelay = Math.random()*5+'s'; spks.appendChild(s);
         }
+        const sky = document.getElementById('skyBox');
         for(let i=0; i<70; i++){
             const s = document.createElement('div'); s.className='bg-star';
             s.style.width = s.style.height = Math.random()*2.5+'px';
             s.style.left = Math.random()*100+'%'; s.style.top = Math.random()*100+'%';
-            document.getElementById('skyBox').appendChild(s);
+            sky.appendChild(s);
         }
         window.showStarMsg = () => document.getElementById('starMessage').style.display='block';
         const run = () => {
