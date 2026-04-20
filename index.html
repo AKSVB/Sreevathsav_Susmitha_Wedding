@@ -297,38 +297,19 @@
         const mediaPreview = document.getElementById('mediaPreview');
         let selectedFiles = [];
 
-        // --- NEW: DRAG AND DROP LOGIC ---
+        // --- DRAG AND DROP LOGIC ---
         const dropZone = document.getElementById('dropZone');
-
-        dropZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            dropZone.style.background = 'rgba(245, 176, 65, 0.3)';
-            dropZone.style.border = '2px dashed var(--primary)';
-        });
-
-        dropZone.addEventListener('dragleave', (e) => {
-            e.preventDefault();
-            dropZone.style.background = 'rgba(245, 176, 65, 0.1)';
-            dropZone.style.border = '2px dashed var(--secondary)';
-        });
-
+        dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.style.background = 'rgba(245, 176, 65, 0.3)'; dropZone.style.border = '2px dashed var(--primary)'; });
+        dropZone.addEventListener('dragleave', (e) => { e.preventDefault(); dropZone.style.background = 'rgba(245, 176, 65, 0.1)'; dropZone.style.border = '2px dashed var(--secondary)'; });
         dropZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            dropZone.style.background = 'rgba(245, 176, 65, 0.1)';
-            dropZone.style.border = '2px dashed var(--secondary)';
-            
-            if (e.dataTransfer.files.length > 0) {
-                mediaInput.files = e.dataTransfer.files; 
-                mediaInput.dispatchEvent(new Event('change')); // Trigger the preview dynamically
-            }
+            e.preventDefault(); dropZone.style.background = 'rgba(245, 176, 65, 0.1)'; dropZone.style.border = '2px dashed var(--secondary)';
+            if (e.dataTransfer.files.length > 0) { mediaInput.files = e.dataTransfer.files; mediaInput.dispatchEvent(new Event('change')); }
         });
 
         mediaInput.addEventListener('change', function() {
-            mediaPreview.innerHTML = ''; 
-            selectedFiles = Array.from(this.files);
+            mediaPreview.innerHTML = ''; selectedFiles = Array.from(this.files);
             selectedFiles.forEach(f => {
-                const reader = new FileReader();
-                reader.onload = e => {
+                const reader = new FileReader(); reader.onload = e => {
                     const el = document.createElement(f.type.startsWith('image/') ? 'img' : 'video');
                     el.src = e.target.result; if(el.tagName==='VIDEO') el.muted=true;
                     mediaPreview.appendChild(el);
@@ -342,12 +323,8 @@
             const name = document.getElementById('mediaName').value;
             const caption = document.getElementById('mediaCaption').value;
             const isPrivate = document.querySelector('input[name="privacy"]:checked').value === 'private';
-            
             if (selectedFiles.length === 0 && caption.trim() === "") return alert("Please add a photo or write a blessing!");
-
-            const submitBtn = document.getElementById('mediaSubmitBtn');
-            submitBtn.innerText = "Saving..."; submitBtn.disabled = true;
-
+            const submitBtn = document.getElementById('mediaSubmitBtn'); submitBtn.innerText = "Saving..."; submitBtn.disabled = true;
             try {
                 if (selectedFiles.length > 0) {
                     for (const file of selectedFiles) {
@@ -355,39 +332,92 @@
                         const url = await getDownloadURL((await uploadBytesResumable(sRef, file)).ref);
                         await addDoc(collection(db, "guest_memories"), { name, caption, isPrivate, fileUrl: url, fileType: file.type, likes: 0, timestamp: serverTimestamp() });
                     }
-                } else {
-                    await addDoc(collection(db, "guest_memories"), { name, caption, isPrivate, fileUrl: null, fileType: 'text', likes: 0, timestamp: serverTimestamp() });
-                }
+                } else { await addDoc(collection(db, "guest_memories"), { name, caption, isPrivate, fileUrl: null, fileType: 'text', likes: 0, timestamp: serverTimestamp() }); }
                 alert("Upload successful!"); e.target.reset(); mediaPreview.innerHTML = ''; selectedFiles = [];
             } catch (err) { alert("Upload failed."); } finally { submitBtn.innerText = "Upload Memories"; submitBtn.disabled = false; }
         });
 
-        // Gallery & Lightbox Logic
-        const mainGrid = document.getElementById('main-gallery');
+        // --- ⏺ VOICE RECORDING LOGIC (RESTORED) ---
+        let mediaRecorder;
+        let audioChunks = [];
+        let audioBlob = null;
+
+        const recordBtn = document.getElementById('recordBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const audioPlayback = document.getElementById('audioPlayback');
+        const uploadAudioBtn = document.getElementById('uploadAudioBtn');
+
+        recordBtn.addEventListener('click', async () => {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+                mediaRecorder.ondataavailable = (event) => { audioChunks.push(event.data); };
+                mediaRecorder.onstop = () => {
+                    audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    audioPlayback.src = audioUrl;
+                    audioPlayback.style.display = 'block';
+                    uploadAudioBtn.style.display = 'block';
+                };
+                mediaRecorder.start();
+                recordBtn.style.display = 'none';
+                stopBtn.style.display = 'block';
+            } catch (err) {
+                alert("Microphone access denied. Please allow mic access to record a message!");
+                console.error(err);
+            }
+        });
+
+        stopBtn.addEventListener('click', () => {
+            mediaRecorder.stop();
+            mediaRecorder.stream.getTracks().forEach(track => track.stop());
+            stopBtn.style.display = 'none';
+            recordBtn.style.display = 'block';
+            recordBtn.innerText = "⏺ Re-record Note";
+        });
+
+        uploadAudioBtn.addEventListener('click', async () => {
+            const name = document.getElementById('audioName').value;
+            const isPrivate = document.querySelector('input[name="audio_privacy"]:checked').value === 'private';
+            if (!name) return alert("Please enter your name first!");
+            uploadAudioBtn.innerText = "Sending...";
+            uploadAudioBtn.disabled = true;
+            try {
+                const audioRef = ref(storage, `voice_notes/${Date.now()}.webm`);
+                const snapshot = await uploadBytesResumable(audioRef, audioBlob);
+                const downloadURL = await getDownloadURL(snapshot.ref);
+                await addDoc(collection(db, "voice_notes"), { name, isPrivate, audioUrl: downloadURL, timestamp: serverTimestamp() });
+                alert("Voice note sent successfully!");
+                audioPlayback.style.display = 'none';
+                uploadAudioBtn.style.display = 'none';
+                recordBtn.innerText = "⏺ Start Recording";
+            } catch (err) {
+                alert("Failed to send voice note.");
+                console.error(err);
+            } finally {
+                uploadAudioBtn.innerText = "Send Voice Note";
+                uploadAudioBtn.disabled = false;
+            }
+        });
+
+        // Gallery Listeners
         onSnapshot(query(collection(db, "guest_memories"), where("isPrivate", "==", false), orderBy("timestamp", "desc")), (snap) => {
-            mainGrid.innerHTML = ''; 
-            if (snap.empty) return mainGrid.innerHTML = '<p style="width:100%; text-align:center;">No memories shared yet.</p>';
-            
+            mainGrid.innerHTML = ''; if (snap.empty) return mainGrid.innerHTML = '<p style="width:100%; text-align:center;">No memories shared yet.</p>';
             snap.forEach((doc) => {
                 const d = doc.data(); const id = doc.id; const likes = d.likes || 0;
-                const el = document.createElement('div'); el.className = 'polaroid-card'; 
-                el.onclick = () => window.openLightbox(id, d.fileUrl, d.fileType, d.name, d.caption, likes);
-
+                const el = document.createElement('div'); el.className = 'polaroid-card'; el.onclick = () => window.openLightbox(id, d.fileUrl, d.fileType, d.name, d.caption, likes);
                 let content = '';
                 if (d.fileType === 'text') content = `<div style="height:200px; display:flex; align-items:center; justify-content:center; background:#fff8eb; padding:15px; border: 1px solid rgba(245, 176, 65, 0.4);"><p style="font-family:'Playfair Display',serif; font-style:italic; color:var(--primary);">"${d.caption}"</p></div>`;
                 else if (d.fileType?.startsWith('video/')) content = `<video src="${d.fileUrl}" style="width:100%; height:200px; object-fit:cover;"></video>`;
                 else content = `<img src="${d.fileUrl}" style="width:100%; height:200px; object-fit:cover;">`;
-
                 el.innerHTML = content + `<div style="margin-top:12px; text-align:center;"><strong>${d.name}</strong></div>` + (likes > 0 ? `<div class="mini-like-badge">❤️ ${likes}</div>` : '');
                 mainGrid.appendChild(el);
             });
         });
 
-        // Voice Notes Gallery
-        const audioGrid = document.getElementById('audio-gallery');
         onSnapshot(query(collection(db, "voice_notes"), where("isPrivate", "==", false), orderBy("timestamp", "desc")), (snap) => {
-            audioGrid.innerHTML = ''; 
-            if (snap.empty) return audioGrid.innerHTML = '<p style="width:100%; text-align:center;">No voice notes yet.</p>';
+            audioGrid.innerHTML = ''; if (snap.empty) return audioGrid.innerHTML = '<p style="width:100%; text-align:center;">No voice notes yet.</p>';
             snap.forEach((doc) => {
                 const d = doc.data(); const el = document.createElement('div'); el.className = 'polaroid-card'; 
                 el.innerHTML = `<div style="height:120px; display:flex; flex-direction:column; align-items:center; justify-content:center; background:#fffaf0; padding:15px; border: 1px solid #ddd;"><span style="font-size:2rem; margin-bottom:10px;">🎙️</span><audio src="${d.audioUrl}" controls style="width:100%; height:35px;"></audio></div><div style="margin-top:12px; text-align:center;"><strong>${d.name}</strong></div>`;
@@ -396,12 +426,10 @@
         });
 
         window.openLightbox = (id, url, type, name, caption, likes) => {
-            window.currentLbId = id;
-            const container = document.getElementById('lightbox-media-container');
+            window.currentLbId = id; const container = document.getElementById('lightbox-media-container');
             if (type === 'text') container.innerHTML = `<div style="padding:40px; background:#fff8eb; text-align:center; max-width: 500px; border-radius: 8px;"><p style="font-family:'Playfair Display',serif; font-size:1.5rem; color:var(--primary); font-style:italic;">"${caption}"</p></div>`;
             else if (type?.startsWith('video/')) container.innerHTML = `<video src="${url}" controls autoplay></video>`;
             else container.innerHTML = `<img src="${url}">`;
-            
             document.getElementById('lightbox-caption').innerHTML = `<strong>${name}</strong>`;
             document.getElementById('like-count').innerText = likes;
             document.getElementById('lightbox').classList.add('active');
@@ -409,8 +437,7 @@
         window.closeLightbox = () => { document.getElementById('lightbox').classList.remove('active'); document.getElementById('lightbox-media-container').innerHTML = ''; };
         window.likeMedia = async () => {
             if (!window.currentLbId) return;
-            const btn = document.getElementById('like-btn'); if(btn) { btn.style.transform = 'scale(1.2)'; setTimeout(() => btn.style.transform = 'scale(1.05)', 200); }
-            const count = document.getElementById('like-count'); if(count) count.innerText = parseInt(count.innerText) + 1;
+            const count = document.getElementById('like-count'); count.innerText = parseInt(count.innerText) + 1;
             await updateDoc(doc(db, "guest_memories", window.currentLbId), { likes: increment(1) });
         };
     </script>
@@ -420,23 +447,16 @@
             const sky = document.getElementById('skyBox');
             if(sky) {
                 for(let i=0; i<75; i++) {
-                    let s = document.createElement('div');
-                    s.className = 'bg-star';
-                    s.style.width = Math.random() * 2.5 + 'px';
-                    s.style.height = s.style.width;
-                    s.style.left = Math.random() * 100 + '%';
-                    s.style.top = Math.random() * 100 + '%';
-                    s.style.opacity = Math.random() * 0.8 + 0.1;
-                    sky.appendChild(s);
+                    let s = document.createElement('div'); s.className = 'bg-star';
+                    s.style.width = Math.random() * 2.5 + 'px'; s.style.height = s.style.width;
+                    s.style.left = Math.random() * 100 + '%'; s.style.top = Math.random() * 100 + '%';
+                    s.style.opacity = Math.random() * 0.8 + 0.1; sky.appendChild(s);
                 }
             }
         });
-
         window.revealStarMessage = () => {
             document.getElementById('starMessage').style.display = 'block';
-            setTimeout(() => {
-                document.getElementById('starMessage').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }, 100);
+            setTimeout(() => { document.getElementById('starMessage').scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 100);
         };
     </script>
 
