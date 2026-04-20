@@ -41,10 +41,21 @@
         .upload-zone { border: 2px dashed var(--secondary); border-radius: 15px; padding: 2rem; text-align: center; background: rgba(245, 176, 65, 0.05); cursor: pointer; }
         input, textarea { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #ddd; box-sizing: border-box; }
         button { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 30px; cursor: pointer; width: 100%; font-weight: 600; }
-        .lightbox { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.9); z-index: 2000; display: none; flex-direction: column; align-items: center; justify-content: center; }
+        
+        /* --- DESKTOP OPTIMIZED LIGHTBOX --- */
+        .lightbox { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.92); z-index: 2000; display: none; flex-direction: column; align-items: center; justify-content: center; }
         .lightbox.active { display: flex !important; }
-        .lightbox-actions { margin-top: 15px; display: flex; gap: 20px; color: white; align-items: center; }
-        #lb-like-btn { background: var(--primary); border: none; color: white; padding: 8px 20px; border-radius: 20px; cursor: pointer; }
+        .lightbox-content-wrapper { position: relative; display: flex; align-items: center; justify-content: center; width: 90%; max-width: 1200px; height: 80vh; }
+        .lightbox-content { max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 8px; box-shadow: 0 0 30px rgba(0,0,0,0.5); }
+        .nav-arrow { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.1); color: white; border: none; width: 50px; height: 50px; border-radius: 50%; font-size: 2rem; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
+        .nav-arrow:hover { background: var(--primary); }
+        .arrow-left { left: -60px; }
+        .arrow-right { right: -60px; }
+        @media (max-width: 768px) { .nav-arrow { width: 40px; height: 40px; font-size: 1.5rem; } .arrow-left { left: 5px; } .arrow-right { right: 5px; } }
+        
+        .lightbox-actions { margin-top: 15px; display: flex; gap: 20px; color: white; align-items: center; z-index: 2001; }
+        #lb-like-btn { background: var(--primary); border: none; color: white; padding: 8px 25px; border-radius: 20px; cursor: pointer; font-weight: bold; }
+        
         .bapu-spacer { display: block; width: 80%; max-width: 280px; margin: 0 auto 2rem auto; opacity: 0.25; }
         @media (min-width: 1200px) { .bapu-spacer { position: relative; margin: 0; width: 220px; } .spacer-left { float: left; margin-left: -280px; transform: rotate(-3deg); } .spacer-right { float: right; margin-right: -280px; transform: rotate(3deg); } }
         .pattabhishekam-footer { width: 100%; max-width: 1200px; display: block; margin: 4rem auto 2rem auto; mix-blend-mode: multiply; }
@@ -54,8 +65,12 @@
 </head>
 <body>
     <div id="lightbox" class="lightbox">
-        <span style="position:absolute; top:20px; right:30px; color:white; font-size:3rem; cursor:pointer;" onclick="closeLightbox()">×</span>
-        <div id="lightbox-media-container" style="max-width:90vw; max-height:75vh;"></div>
+        <span style="position:absolute; top:20px; right:30px; color:white; font-size:3.5rem; cursor:pointer; z-index:2002;" onclick="closeLightbox()">×</span>
+        <div class="lightbox-content-wrapper">
+            <button class="nav-arrow arrow-left" onclick="changeMedia(-1)">‹</button>
+            <div id="lightbox-media-container" style="display:flex; justify-content:center; align-items:center; height:100%; width:100%;"></div>
+            <button class="nav-arrow arrow-right" onclick="changeMedia(1)">›</button>
+        </div>
         <div class="lightbox-actions">
             <button id="lb-like-btn" onclick="likeMedia()">❤️ Like (<span id="lb-like-count">0</span>)</button>
         </div>
@@ -82,7 +97,7 @@
                 <div class="timeline-step"><div class="timeline-marker">💍</div><div class="timeline-content"><h3>Nischitartham</h3><p><strong>19th February, 2026</strong><br>The elegant beginning of our forever. Surrounded by the warmth of our families, we exchanged promises and sought the first blessings for a lifetime of togetherness.</p></div></div>
                 <div class="timeline-step"><div class="timeline-marker">🟡</div><div class="timeline-content"><h3>Mangala Snanam & Haldi</h3><p><strong>19th April, 2026</strong><br>A vibrant celebration of purity and joy. Bathed in golden turmeric, traditional melodies, and the deep affection of our loved ones, we begin the sacred preparations.</p></div></div>
                 <div class="timeline-step"><div class="timeline-marker">🌿</div><div class="timeline-content"><h3>Snathakam & Edurukolu</h3><p><strong>22nd April, 2026</strong><br>Honoring centuries of tradition. A day marked by the purifying Snathakam rituals, followed by the joyous Edurukolu, where our families playfully welcome the groom with festive warmth.</p></div></div>
-                <div class="timeline-step"><div class="timeline-marker">🪔</div><div class="timeline-content"><h3>The Sacred Muhurtham</h3><p><strong>23rd April, 2026 at 8:08 AM IST</strong><br>Venue: Goteti Kalyana Vedika (Narasimha Hall)<br><a href="https://maps.google.com/?q=Goteti+Kalyana+Vedika+Hyderabad" target="_blank" style="color:var(--primary); font-weight:700;">📍 View on Google Maps</a></p></div></div>
+                <div class="timeline-step"><div class="timeline-marker">🪔</div><div class="timeline-content"><h3>The Sacred Muhurtham</h3><p><strong>23rd April, 2026 at 8:08 AM IST</strong><br>Venue: Goteti Kalyana Vedika (Narasimha Hall)<br><a href="http://googleusercontent.com/maps.google.com/7" target="_blank" style="color:var(--primary); font-weight:700;">📍 View on Google Maps</a></p></div></div>
             </div>
         </div>
 
@@ -125,7 +140,7 @@
         </div>
     </div>
 
-    <img src="Sita_Rama_Pattabhishekam.jpg" class="pattabhishekam-footer" alt="Pattabhishekam">
+    <img src="Sita_Rama_Pattabhishekam.jpg" class="pattabhishekam-footer" alt="Sita Rama Pattabhishekam">
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
@@ -150,15 +165,17 @@
             e.preventDefault();
             const btn = document.getElementById('mediaSubmitBtn'); btn.disabled = true; btn.innerText = "Sharing...";
             const isPrivate = document.querySelector('input[name="privacy"]:checked').value === 'private';
+            const name = document.getElementById('mediaName').value;
+            const caption = document.getElementById('mediaCaption').value;
             try {
                 if(mediaInput.files.length){
                     for(const f of mediaInput.files){
                         const sRef = ref(storage, `wedding/${Date.now()}_${f.name}`);
                         const url = await getDownloadURL((await uploadBytesResumable(sRef, f)).ref);
-                        await addDoc(collection(db, "guest_memories"), { name: document.getElementById('mediaName').value, caption: document.getElementById('mediaCaption').value, isPrivate, fileUrl: url, fileType: f.type, likes: 0, timestamp: serverTimestamp() });
+                        await addDoc(collection(db, "guest_memories"), { name, caption, isPrivate, fileUrl: url, fileType: f.type, likes: 0, timestamp: serverTimestamp() });
                     }
                 } else {
-                    await addDoc(collection(db, "guest_memories"), { name: document.getElementById('mediaName').value, caption: document.getElementById('mediaCaption').value, isPrivate, fileUrl: null, fileType: 'text', likes: 0, timestamp: serverTimestamp() });
+                    await addDoc(collection(db, "guest_memories"), { name, caption, isPrivate, fileUrl: null, fileType: 'text', likes: 0, timestamp: serverTimestamp() });
                 }
                 alert("Shared!"); e.target.reset(); mediaPreview.innerHTML = '';
             } finally { btn.disabled = false; btn.innerText = "Upload Memory"; }
@@ -180,14 +197,15 @@
         document.getElementById('stopBtn').onclick = () => { mediaRecorder.stop(); document.getElementById('stopBtn').style.display = 'none'; document.getElementById('recordBtn').style.display = 'block'; };
         document.getElementById('uploadAudioBtn').onclick = async () => {
             const isPrivate = document.querySelector('input[name="audio_privacy"]:checked').value === 'private';
+            const name = document.getElementById('audioName').value;
             const url = await getDownloadURL((await uploadBytesResumable(ref(storage, `voice/${Date.now()}.webm`), audioBlob)).ref);
-            await addDoc(collection(db, "voice_notes"), { name: document.getElementById('audioName').value, isPrivate, audioUrl: url, likes: 0, timestamp: serverTimestamp() });
+            await addDoc(collection(db, "voice_notes"), { name, isPrivate, audioUrl: url, likes: 0, timestamp: serverTimestamp() });
             alert("Sent!"); location.reload();
         };
 
         const galleryContainer = document.getElementById('guest-gallery-container');
         let mData = [], vData = [];
-        window.activeMediaId = null; window.activeMediaType = null;
+        window.currentMediaSet = []; window.currentIndex = 0;
 
         const render = () => {
             galleryContainer.innerHTML = ''; const groups = {};
@@ -199,40 +217,13 @@
                 let html = `<div class="guest-header"><div class="guest-avatar">${name[0].toUpperCase()}</div><div class="guest-name">${name}</div></div><div class="guest-content-grid">`;
                 
                 const mediaItems = g.items.filter(i => i.type==='media');
-                if(mediaItems.length) html += `<div class="guest-photo-reel">${mediaItems.map(i => i.fileType.startsWith('image') ? `<img src="${i.fileUrl}" onclick="openLightbox('${i.id}','${i.fileUrl}','img',${i.likes})">` : `<video src="${i.fileUrl}" onclick="openLightbox('${i.id}','${i.fileUrl}','vid',${i.likes})"></video>`).join('')}</div>`;
-                
+                if(mediaItems.length) {
+                    html += `<div class="guest-photo-reel">`;
+                    mediaItems.forEach((i, idx) => {
+                        const itemsJson = JSON.stringify(mediaItems).replace(/"/g, '&quot;');
+                        html += i.fileType.startsWith('image') ? `<img src="${i.fileUrl}" onclick="openLightbox(${idx}, ${itemsJson})">` : `<video src="${i.fileUrl}" onclick="openLightbox(${idx}, ${itemsJson})"></video>`;
+                    });
+                    html += `</div>`;
+                }
                 g.items.filter(i => i.type==='text').forEach(i => { html += `<div class="guest-text-blessing"><button class="like-btn-small" onclick="likeText('${i.id}')">❤️ ${i.likes||0}</button>"${i.caption}"</div>`; });
-                g.items.filter(i => i.type==='voice').forEach(i => { html += `<div class="guest-audio-note"><button class="like-btn-small" onclick="likeVoice('${i.id}')">❤️ ${i.likes||0}</button><audio src="${i.audioUrl}" controls></audio></div>`; });
-                
-                card.innerHTML = html + `</div>`; galleryContainer.appendChild(card);
-            });
-        };
-
-        onSnapshot(query(collection(db,"guest_memories"),orderBy("timestamp","desc")), s => { mData = s.docs.map(d=>({id: d.id, ...d.data()})); render(); });
-        onSnapshot(query(collection(db,"voice_notes"),orderBy("timestamp","desc")), s => { vData = s.docs.map(d=>({id: d.id, ...d.data()})); render(); });
-
-        window.openLightbox = (id, url, type, likes) => {
-            window.activeMediaId = id; const c = document.getElementById('lightbox-media-container');
-            c.innerHTML = type==='img' ? `<img src="${url}">` : `<video src="${url}" controls autoplay></video>`;
-            document.getElementById('lb-like-count').innerText = likes || 0;
-            document.getElementById('lightbox').classList.add('active');
-        };
-        window.closeLightbox = () => { document.getElementById('lightbox').classList.remove('active'); };
-        window.likeMedia = async () => { if(activeMediaId) { await updateDoc(doc(db, "guest_memories", activeMediaId), { likes: increment(1) }); document.getElementById('lb-like-count').innerText = parseInt(document.getElementById('lb-like-count').innerText)+1; } };
-        window.likeText = async (id) => { await updateDoc(doc(db, "guest_memories", id), { likes: increment(1) }); };
-        window.likeVoice = async (id) => { await updateDoc(doc(db, "voice_notes", id), { likes: increment(1) }); };
-    </script>
-
-    <script>
-        const updateCountdown = () => {
-            const diff = new Date("2026-04-23T08:08:00+05:30").getTime() - new Date().getTime();
-            if (diff <= 0) { document.getElementById('countdown').innerHTML = "<div class='just-married-msg'>Happily Married! 🌺</div>"; return; }
-            document.getElementById('days').innerText = Math.floor(diff/86400000).toString().padStart(2,'0');
-            document.getElementById('hours').innerText = Math.floor((diff%86400000)/3600000).toString().padStart(2,'0');
-            document.getElementById('minutes').innerText = Math.floor((diff%3600000)/60000).toString().padStart(2,'0');
-            document.getElementById('seconds').innerText = Math.floor((diff%60000)/1000).toString().padStart(2,'0');
-        };
-        updateCountdown(); setInterval(updateCountdown, 1000);
-    </script>
-</body>
-</html>
+                g.items.filter(i => i.type==='voice').forEach(i => { html += `<div class="guest-audio-note"><button class="like-btn-small" onclick="likeVoice('${i.id}')">❤️ ${i.likes||0}</button><audio src="${i.audioUrl}" controls></audio>
