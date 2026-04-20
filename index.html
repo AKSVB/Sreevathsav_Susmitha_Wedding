@@ -77,7 +77,7 @@
         
         @keyframes floatUp { 0% { bottom: -10%; opacity: 0; } 20% { opacity: 0.6; } 100% { bottom: 110%; opacity: 0; } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUp { to { transform: translateY(0); opacity: 1; } }
+        @keyframes slideUp { to { transform: translateY(20px); opacity: 1; } }
         @media (max-width: 768px) { h1 { font-size: 3rem; } .timeline-container::after { left: 31px; } .timeline-step { width: 100%; padding-left: 70px; text-align: left !important; } .timeline-marker { left: 11px !important; } }
     </style>
 </head>
@@ -160,7 +160,7 @@
             </div>
             <button id="recBtn" onclick="startRec()" style="background:#555; color:white; padding:15px; width:100%; border-radius:30px; border:none; cursor:pointer; font-weight:bold;">⏺ Start Recording</button>
             <button id="stopBtn" onclick="stopRec()" style="display:none; background:var(--primary); color:white; padding:15px; width:100%; border-radius:30px; border:none; cursor:pointer; font-weight:bold;">⏹ Stop & Save</button>
-            <audio id="aPlay" controls style="width: 100%; margin-top: 15px; display: none;"></audio>
+            <audio id="aPlay" controls style="width:100%; margin-top:15px; display:none;"></audio>
             <button id="aBtn" onclick="uploadAudio()" style="display:none; background:var(--primary); color:white; padding:15px; width:100%; border-radius:30px; border:none; cursor:pointer; margin-top:10px; font-weight:bold;">Send Voice Note</button>
         </div>
 
@@ -170,7 +170,7 @@
         </div>
     </div>
 
-    <img src="Sita_Rama_Pattabhishekam.jpg" class="pattabhishekam-footer">
+    <img src="Sita_Rama_Pattabhishekam.jpg" class="pattabhishekam-footer" alt="Sita Rama Pattabhishekam Blessing">
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
@@ -241,25 +241,37 @@
                 const items = groups[name]; const card = document.createElement('div'); card.className = 'guest-folder-card';
                 let h = `<div class="guest-header"><div class="guest-avatar">${name[0].toUpperCase()}</div><div class="guest-name">${name}</div></div><div class="guest-content-grid">`;
                 const mediaItems = items.filter(i => i.fileUrl);
+                
                 if(mediaItems.length) {
                     h += `<div class="guest-photo-reel">`;
-                    mediaItems.forEach(i => {
-                        const itemsStr = JSON.stringify(mediaItems).replace(/"/g, '&quot;');
-                        h += i.fileType.startsWith('image') ? `<img src="${i.fileUrl}" onclick="openLB('${i.id}', '${itemsStr}')">` : `<video src="${i.fileUrl}" onclick="openLB('${i.id}', '${itemsStr}')"></video>`;
+                    mediaItems.forEach((i, idx) => {
+                        // FIX: Use ID-based indexing to prevent quoting errors
+                        h += i.fileType.startsWith('image') ? `<img src="${i.fileUrl}" class="gal-img" data-user="${name}" data-id="${i.id}">` : `<video src="${i.fileUrl}" class="gal-img" data-user="${name}" data-id="${i.id}"></video>`;
                     });
                     h += `</div>`;
                 }
                 items.filter(i=>i.fileType==='text').forEach(i => { h += `<div class="guest-text-blessing"><button class="like-btn-small" onclick="lT('${i.id}')">❤️ <span id="lcnt-${i.id}">${i.likes||0}</span></button>"${i.caption}"</div>`; });
                 items.filter(i=>i.cat==='v').forEach(i => { h += `<div style="margin-bottom:10px;"><button class="like-btn-small" onclick="lV('${i.id}')">❤️ <span id="lcnt-${i.id}">${i.likes||0}</span></button><audio src="${i.audioUrl}" controls style="width:80%; height:30px;"></audio></div>`; });
-                card.innerHTML = h + `</div>`; root.appendChild(card);
+                card.innerHTML = h + `</div>`; 
+                
+                // Add event listeners to the images in this folder
+                card.querySelectorAll('.gal-img').forEach(el => {
+                    el.onclick = () => {
+                        const userName = el.getAttribute('data-user');
+                        const itemId = el.getAttribute('data-id');
+                        const userMedia = items.filter(i => i.fileUrl);
+                        openLB(itemId, userMedia);
+                    };
+                });
+                root.appendChild(card);
             });
         };
 
         onSnapshot(query(collection(db,"guest_memories"),orderBy("timestamp","desc")), s => { mData = s.docs.map(d=>({id:d.id, ...d.data()})); render(); });
         onSnapshot(query(collection(db,"voice_notes"),orderBy("timestamp","desc")), s => { vData = s.docs.map(d=>({id:d.id, ...d.data()})); render(); });
 
-        window.openLB = (id, setStr) => {
-            curSet = JSON.parse(setStr.replace(/&quot;/g, '"')); curIdx = curSet.findIndex(i => i.id === id);
+        window.openLB = (id, set) => {
+            curSet = set; curIdx = set.findIndex(i => i.id === id);
             updateLB(); document.getElementById('lightbox').classList.add('active');
         };
         window.updateLB = () => {
@@ -269,11 +281,9 @@
         window.navLB = (dir) => { curIdx = (curIdx + dir + curSet.length) % curSet.length; updateLB(); };
         window.closeLB = () => document.getElementById('lightbox').classList.remove('active');
         
-        // --- FIXED LIKE FUNCTIONS ---
         window.likeLB = async () => {
             const currentItem = curSet[curIdx];
-            const docRef = doc(db, "guest_memories", currentItem.id);
-            await updateDoc(docRef, { likes: increment(1) });
+            await updateDoc(doc(db, "guest_memories", currentItem.id), { likes: increment(1) });
             currentItem.likes = (currentItem.likes || 0) + 1;
             document.getElementById('lb-count').innerText = currentItem.likes;
         };
