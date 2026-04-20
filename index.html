@@ -46,7 +46,6 @@
         .timeline-content h3 { margin: 0 0 10px 0; color: var(--primary); font-family: 'Playfair Display', serif; }
         .timeline-content p { margin: 0; font-size: 0.95rem; color: #555; }
 
-        /* --- 🌌 ARUNDHATI STAR LOCATOR --- */
         .star-locator-card { background: linear-gradient(135deg, #0d1321 0%, #1a2639 100%); color: #fff; text-align: center; border: 1px solid rgba(245, 176, 65, 0.3); }
         .star-locator-card h2 { color: var(--secondary); }
         .sky-box { width: 100%; height: 280px; background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%); position: relative; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); cursor: crosshair; overflow: hidden; margin-top: 20px; box-shadow: inset 0 0 20px rgba(0,0,0,0.8); }
@@ -57,7 +56,6 @@
         .star-message { display: none; margin-top: 25px; padding: 20px; background: rgba(245, 176, 65, 0.1); border-left: 4px solid var(--secondary); border-radius: 4px; font-family: 'Playfair Display', serif; color: #fff; font-size: 1.1rem; line-height: 1.6; animation: fadeIn 1.5s ease-in-out; text-align: left; }
         @keyframes pulseStar { 0% { opacity: 0.6; } 100% { opacity: 1; transform: scale(1.2); } }
 
-        /* --- 🎨 BAPU SIDELINERS --- */
         .bapu-spacer { display: block; width: 80%; max-width: 300px; margin: 0 auto 3rem auto; opacity: 1; transition: 0.4s ease; position: relative; z-index: 2; }
         @media (min-width: 1200px) {
             .container { overflow: visible; }
@@ -66,7 +64,6 @@
             .spacer-right { margin-right: -320px; margin-top: -100px; float: right; clear: right; transform: rotate(3deg); }
         }
 
-        /* --- 📸 GROUPED GUEST FOLDERS --- */
         .guest-folder-card { background: #fff; border-radius: 15px; padding: 1.5rem; width: 100%; max-width: 500px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); margin: 0 auto 2rem auto; border-top: 5px solid var(--secondary); }
         .guest-header { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
         .guest-avatar { width: 40px; height: 40px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
@@ -105,11 +102,7 @@
     </style>
 </head>
 <body>
-    
-    <div class="sparks-container">
-        <div class="spark"></div><div class="spark"></div><div class="spark"></div><div class="spark"></div>
-    </div>
-
+    <div class="sparks-container"></div>
     <div id="lightbox" class="lightbox">
         <span class="close-lightbox" onclick="closeLightbox()">×</span>
         <div class="lightbox-content" id="lightbox-media-container"></div>
@@ -146,7 +139,7 @@
                     <div class="timeline-content">
                         <h3>The Sacred Muhurtham</h3>
                         <p><strong>23rd April, 2026 at 8:08 AM IST</strong><br>Venue: Goteti Kalyana Vedika (Narasimha Hall)<br>
-                        <a href="https://maps.app.goo.gl/dz2WuK7j3X2Y823R6" target="_blank" style="color: var(--primary); font-size: 0.9rem; text-decoration: none; font-weight: 500;">📍 View on Google Maps</a></p>
+                        <a href="https://maps.google.com" target="_blank" style="color: var(--primary); font-size: 0.9rem; text-decoration: none; font-weight: 500;">📍 View on Google Maps</a></p>
                     </div>
                 </div>
             </div>
@@ -185,14 +178,10 @@
             <button type="button" id="uploadAudioBtn" style="display: none;">Send Voice Note</button>
         </div>
 
-        <img src="page_8.png" class="bapu-spacer spacer-left" alt="Bapu Art">
-
         <div id="gallery" class="card">
             <h2>The Gallery</h2>
             <div id="guest-gallery-container"></div>
         </div>
-
-        <img src="page_15_enhanced.png" class="bapu-spacer spacer-right" alt="Bapu Art">
     </div>
 
     <img src="Sita_Rama_Pattabhishekam.jpg" class="pattabhishekam-footer" alt="Pattabhishekam">
@@ -205,10 +194,10 @@
         const firebaseConfig = { apiKey: "AIzaSyBRR2elLneGSivN4-8fqyf9QdV6U3uzWWQ", authDomain: "ourlovelywedding-53662.firebaseapp.com", projectId: "ourlovelywedding-53662", storageBucket: "ourlovelywedding-53662.firebasestorage.app", messagingSenderId: "711916877913", appId: "1:711916877913:web:315706a6eaa64e408d1948" };
         const app = initializeApp(firebaseConfig); const db = getFirestore(app); const storage = getStorage(app);
 
-        // --- DRAG & DROP LOGIC ---
         const dropZone = document.getElementById('dropZone');
         const mediaInput = document.getElementById('mediaInput');
         const mediaPreview = document.getElementById('mediaPreview');
+        
         dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.style.background = 'rgba(245,176,65,0.2)'; });
         dropZone.addEventListener('dragleave', () => { dropZone.style.background = 'rgba(245,176,65,0.1)'; });
         dropZone.addEventListener('drop', e => { e.preventDefault(); dropZone.style.background = 'rgba(245,176,65,0.1)'; if(e.dataTransfer.files.length){ mediaInput.files = e.dataTransfer.files; mediaInput.dispatchEvent(new Event('change')); } });
@@ -224,7 +213,6 @@
             });
         });
 
-        // --- SUBMIT LOGIC ---
         document.getElementById('mediaForm').addEventListener('submit', async e => {
             e.preventDefault();
             const btn = document.getElementById('mediaSubmitBtn'); btn.innerText = "Sharing..."; btn.disabled = true;
@@ -242,7 +230,6 @@
             } catch(e){ alert("Error!"); } finally { btn.innerText = "Upload Memory"; btn.disabled = false; }
         });
 
-        // --- ⏺ VOICE RECORDING ---
         let mediaRecorder, audioChunks = [], audioBlob = null;
         document.getElementById('recordBtn').onclick = async () => {
             try {
@@ -258,17 +245,14 @@
                 mediaRecorder.start(); document.getElementById('recordBtn').style.display = 'none'; document.getElementById('stopBtn').style.display = 'block';
             } catch(e){ alert("Microphone access denied!"); }
         };
-        document.getElementById('stopBtn').onclick = () => { mediaRecorder.stop(); document.getElementById('stopBtn').style.display = 'none'; document.getElementById('recordBtn').style.display = 'block'; document.getElementById('recordBtn').innerText = "⏺ Re-record Note"; };
+        document.getElementById('stopBtn').onclick = () => { mediaRecorder.stop(); document.getElementById('stopBtn').style.display = 'none'; document.getElementById('recordBtn').style.display = 'block'; };
         document.getElementById('uploadAudioBtn').onclick = async () => {
-            const btn = document.getElementById('uploadAudioBtn'); btn.innerText = "Sending..."; btn.disabled = true;
-            try {
-                const url = await getDownloadURL((await uploadBytesResumable(ref(storage, `voice/${Date.now()}.webm`), audioBlob)).ref);
-                await addDoc(collection(db, "voice_notes"), { name: document.getElementById('audioName').value, audioUrl: url, timestamp: serverTimestamp() });
-                alert("Sent!"); location.reload();
-            } catch(e) { alert("Upload failed"); } finally { btn.innerText = "Send Voice Note"; btn.disabled = false; }
+            const btn = document.getElementById('uploadAudioBtn'); btn.innerText = "Sending...";
+            const url = await getDownloadURL((await uploadBytesResumable(ref(storage, `voice/${Date.now()}.webm`), audioBlob)).ref);
+            await addDoc(collection(db, "voice_notes"), { name: document.getElementById('audioName').value, audioUrl: url, timestamp: serverTimestamp() });
+            alert("Sent!"); location.reload();
         };
 
-        // --- GROUPED GALLERY ---
         const galleryContainer = document.getElementById('guest-gallery-container');
         let mData = [], vData = [];
         const render = () => {
@@ -279,7 +263,7 @@
                 const g = groups[name]; const card = document.createElement('div'); card.className = 'guest-folder-card';
                 card.innerHTML = `<div class="guest-header"><div class="guest-avatar">${name[0].toUpperCase()}</div><div class="guest-name">${name}</div></div><div class="guest-content-grid">
                     ${g.p.length ? `<div class="guest-photo-reel">${g.p.map(x => x.fileType.startsWith('image') ? `<img src="${x.fileUrl}" onclick="window.openLightbox('${x.fileUrl}','img')">` : `<video src="${x.fileUrl}" onclick="window.openLightbox('${x.fileUrl}','vid')"></video>`).join('')}</div>` : ''}
-                    ${g.t.length ? `<div class="guest-text-blessing">${g.t.map(x => `<p>"${x}"</p>`).join('')}</div>` : ''}
+                    ${g.t.length ? `<div class="guest-text-blessing">${[...new Set(g.t)].map(x => `<p>"${x}"</p>`).join('')}</div>` : ''}
                     ${g.v.length ? `<div class="guest-audio-note">${g.v.map(x => `<audio src="${x}" controls></audio>`).join('')}</div>` : ''}
                 </div>`;
                 galleryContainer.appendChild(card);
@@ -287,7 +271,6 @@
         };
         onSnapshot(query(collection(db,"guest_memories"),orderBy("timestamp","desc")), s => { mData = s.docs.map(d=>d.data()); render(); });
         onSnapshot(query(collection(db,"voice_notes"),orderBy("timestamp","desc")), s => { vData = s.docs.map(d=>d.data()); render(); });
-        
         window.openLightbox = (url, type) => {
             const c = document.getElementById('lightbox-media-container');
             c.innerHTML = type==='img' ? `<img src="${url}">` : `<video src="${url}" controls autoplay></video>`;
@@ -308,7 +291,6 @@
         });
         window.revealStarMessage = () => document.getElementById('starMessage').style.display='block';
 
-        // --- BULLETPROOF TIMEZONE COUNTDOWN ---
         const updateCountdown = () => {
             const targetDate = new Date("2026-04-23T08:08:00+05:30").getTime();
             const now = new Date().getTime();
@@ -323,8 +305,7 @@
             document.getElementById('minutes').innerText = mins.toString().padStart(2, '0');
             document.getElementById('seconds').innerText = secs.toString().padStart(2, '0');
         };
-        updateCountdown();
-        setInterval(updateCountdown, 1000);
+        updateCountdown(); setInterval(updateCountdown, 1000);
     </script>
 </body>
 </html>
