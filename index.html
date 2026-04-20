@@ -7,86 +7,62 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,400&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #c92a2a; --secondary: #f5b041; --bg-color: #fffaf0; --text-dark: #3e2723; --glass-bg: rgba(255, 255, 255, 0.9); }
-        body { font-family: 'Poppins', sans-serif; background-color: var(--bg-color); color: var(--text-dark); margin: 0; padding: 0; scroll-behavior: smooth; overflow-x: hidden; }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--bg-color); color: var(--text-dark); margin: 0; padding: 0; scroll-behavior: smooth; }
         
-        /* --- HEADER --- */
-        header { height: 85vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: linear-gradient(rgba(62, 39, 35, 0.7), rgba(62, 39, 35, 0.7)), url('cover.png') center/cover fixed; position: relative; }
-        h1 { font-family: 'Playfair Display', serif; font-size: 4.5rem; margin: 0; color: #fff9e6; text-shadow: 2px 2px 8px rgba(0,0,0,0.5); }
-        .subtitle { font-size: 1.2rem; letter-spacing: 3px; margin-top: 15px; text-transform: uppercase; color: var(--secondary); font-weight: 500; }
+        header { height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('cover.png') center/cover fixed; color: white; }
+        h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 8vw, 4.5rem); margin: 0; }
         
-        /* --- TIMER --- */
-        .countdown-container { display: flex; gap: 15px; margin-top: 30px; z-index: 10; flex-wrap: wrap; justify-content: center; }
-        .countdown-box { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 12px; padding: 15px 20px; min-width: 70px; text-align: center; }
-        .countdown-number { font-size: 2.2rem; font-weight: 700; color: #fff; display: block; }
-        .countdown-label { font-size: 0.75rem; text-transform: uppercase; color: var(--secondary); }
-        .just-married-msg { font-family: 'Playfair Display', serif; font-size: 2.5rem; color: var(--secondary); text-shadow: 2px 2px 8px rgba(0,0,0,0.5); }
+        .countdown-container { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; justify-content: center; }
+        .countdown-box { background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; min-width: 80px; backdrop-filter: blur(5px); }
+        .countdown-number { font-size: 2rem; font-weight: 700; display: block; }
+        
+        nav { background: white; padding: 1rem; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); display: flex; justify-content: center; gap: 15px; border-bottom: 3px solid var(--secondary); }
+        nav a { text-decoration: none; color: var(--text-dark); font-weight: 500; font-size: 0.9rem; }
 
-        nav { background: white; padding: 1rem; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 15px rgba(0,0,0,0.08); display: flex; justify-content: center; gap: 20px; border-bottom: 3px solid var(--secondary); }
-        nav a { text-decoration: none; color: var(--text-dark); font-weight: 500; padding: 8px 16px; border-radius: 20px; }
-
-        .container { max-width: 1000px; margin: 3rem auto; padding: 0 20px; }
-        .card { background: var(--glass-bg); backdrop-filter: blur(10px); border-radius: 20px; padding: 2.5rem; margin-bottom: 3rem; border: 1px solid rgba(245, 176, 65, 0.3); }
-        h2 { font-family: 'Playfair Display', serif; color: var(--primary); font-size: 2.5rem; text-align: center; }
+        .container { max-width: 900px; margin: 2rem auto; padding: 0 15px; }
+        .card { background: white; border-radius: 15px; padding: 2rem; margin-bottom: 2.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border: 1px solid #eee; }
+        h2 { font-family: 'Playfair Display', serif; color: var(--primary); text-align: center; font-size: 2.2rem; }
 
         /* --- TIMELINE --- */
-        .timeline-container { position: relative; max-width: 800px; margin: 0 auto; padding: 20px 0; }
-        .timeline-container::after { content: ''; position: absolute; width: 4px; background: rgba(245, 176, 65, 0.4); top: 0; bottom: 0; left: 50%; margin-left: -2px; }
-        .timeline-step { padding: 10px 40px; position: relative; width: 50%; box-sizing: border-box; }
-        .timeline-step:nth-child(odd) { left: 0; text-align: right; }
-        .timeline-step:nth-child(even) { left: 50%; text-align: left; }
-        .timeline-marker { position: absolute; width: 40px; height: 40px; right: -20px; background: var(--primary); border: 4px solid #fff; border-radius: 50%; top: 15px; z-index: 1; display: flex; align-items: center; justify-content: center; }
-        .timeline-step:nth-child(even) .timeline-marker { left: -20px; }
-        .timeline-content { padding: 20px; background: white; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .timeline-step { border-left: 3px solid var(--secondary); margin-left: 20px; padding-left: 30px; position: relative; padding-bottom: 30px; }
+        .timeline-marker { position: absolute; left: -12px; top: 0; background: var(--primary); width: 20px; height: 20px; border-radius: 50%; border: 3px solid white; }
 
-        /* --- GUEST FOLDERS & MEDIA --- */
-        .guest-folder-card { background: #fff; border-radius: 15px; padding: 1.5rem; width: 100%; max-width: 600px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin: 0 auto 2rem auto; border-top: 5px solid var(--secondary); }
-        .guest-header { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
-        .guest-avatar { width: 40px; height: 40px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
-        .guest-photo-reel { display: flex; overflow-x: auto; gap: 10px; padding-bottom: 10px; }
-        .guest-photo-reel img, .guest-photo-reel video { height: 120px; border-radius: 8px; cursor: pointer; border: 1px solid #eee; object-fit: cover; }
-        .guest-text-blessing { background: #fff8eb; padding: 15px; border-radius: 8px; font-style: italic; margin-bottom: 10px; position: relative; border-left: 4px solid var(--secondary); }
-        .like-btn-small { background: white; border: 1px solid #ddd; border-radius: 15px; padding: 2px 10px; font-size: 0.8rem; cursor: pointer; float: right; transition: 0.2s; }
-        
-        /* --- UPLOAD AREA --- */
-        .upload-zone { border: 2px dashed var(--secondary); border-radius: 15px; padding: 2rem; text-align: center; background: rgba(245, 176, 65, 0.05); cursor: pointer; }
-        input, textarea { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #ddd; box-sizing: border-box; }
-        button { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 30px; cursor: pointer; width: 100%; font-weight: 600; }
+        /* --- GALLERY --- */
+        .guest-folder { border: 1px solid #eee; border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; background: #fff; }
+        .guest-name-tag { font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 10px; color: var(--primary); border-bottom: 1px solid #fcfcfc; }
+        .media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; margin-bottom: 10px; }
+        .media-grid img, .media-grid video { width: 100%; height: 120px; object-fit: cover; border-radius: 8px; cursor: pointer; }
+        .text-blessing { background: #fff8eb; padding: 12px; border-radius: 8px; font-style: italic; margin-top: 5px; border-left: 3px solid var(--secondary); position: relative; }
+        .like-btn { background: white; border: 1px solid #ddd; padding: 4px 10px; border-radius: 12px; cursor: pointer; font-size: 0.8rem; float: right; }
 
         /* --- LIGHTBOX (FIXED SCALING) --- */
-        .lightbox { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.95); z-index: 2000; display: none; flex-direction: column; align-items: center; justify-content: center; }
-        .lightbox.active { display: flex !important; }
-        .lightbox-container { position: relative; width: 90%; height: 80%; display: flex; align-items: center; justify-content: center; }
-        .lightbox-content { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 4px; }
-        .nav-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.1); color: white; border: none; padding: 20px; cursor: pointer; font-size: 2rem; border-radius: 50%; }
-        .prev-btn { left: -60px; } .next-btn { right: -60px; }
-        @media (max-width: 768px) { .nav-btn { padding: 10px; } .prev-btn { left: 0; } .next-btn { right: 0; } h1 { font-size: 2.5rem; } .timeline-step { width: 100%; text-align: left !important; padding-left: 60px; } .timeline-container::after { left: 20px; } .timeline-marker { left: 0 !important; } }
+        .lightbox { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; display: none; align-items: center; justify-content: center; }
+        .lightbox.active { display: flex; }
+        .lightbox img, .lightbox video { max-width: 90%; max-height: 85vh; border-radius: 5px; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+        .close-lb { position: absolute; top: 20px; right: 30px; color: white; font-size: 3rem; cursor: pointer; }
 
-        .bapu-spacer { display: block; width: 80%; max-width: 250px; margin: 0 auto 2rem auto; opacity: 0.25; }
-        @media (min-width: 1200px) { .bapu-spacer { position: relative; width: 200px; } .spacer-left { float: left; margin-left: -250px; } .spacer-right { float: right; margin-right: -250px; } }
-        .pattabhishekam-footer { width: 100%; max-width: 1200px; display: block; margin: 4rem auto 2rem auto; mix-blend-mode: multiply; }
+        .upload-zone { border: 2px dashed var(--secondary); padding: 2rem; text-align: center; background: #fafafa; border-radius: 10px; cursor: pointer; }
+        input, textarea { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        button.primary-btn { background: var(--primary); color: white; border: none; padding: 15px; width: 100%; border-radius: 30px; font-weight: 600; cursor: pointer; margin-top: 10px; }
+
+        .bapu-spacer { display: block; width: 60%; margin: 1rem auto; opacity: 0.3; }
+        .footer-img { width: 100%; max-width: 800px; display: block; margin: 2rem auto; mix-blend-mode: multiply; }
     </style>
 </head>
 <body>
-    <div id="lightbox" class="lightbox">
-        <span style="position:absolute; top:20px; right:30px; color:white; font-size:3rem; cursor:pointer;" onclick="closeLightbox()">×</span>
-        <div class="lightbox-container">
-            <button class="nav-btn prev-btn" onclick="navMedia(-1)">‹</button>
-            <div id="lb-content-box" style="width:100%; height:100%; display:flex; justify-content:center; align-items:center;"></div>
-            <button class="nav-btn next-btn" onclick="navMedia(1)">›</button>
-        </div>
-        <div style="margin-top:20px; color:white;">
-            <button onclick="likeCurrentMedia()" style="background:var(--primary); width:auto; padding:8px 20px;">❤️ Like (<span id="lb-like-count">0</span>)</button>
-        </div>
+    <div id="lightbox" class="lightbox" onclick="this.classList.remove('active')">
+        <span class="close-lb">×</span>
+        <div id="lb-content"></div>
     </div>
 
     <header>
         <h1>Sreevathsav & Susmitha</h1>
-        <div class="subtitle">April 23, 2026 • A Vedic Celebration of Love</div>
-        <div id="countdown" class="countdown-container">
-            <div class="countdown-box"><span id="days" class="countdown-number">00</span><span class="countdown-label">Days</span></div>
-            <div class="countdown-box"><span id="hours" class="countdown-number">00</span><span class="countdown-label">Hours</span></div>
-            <div class="countdown-box"><span id="minutes" class="countdown-number">00</span><span class="countdown-label">Mins</span></div>
-            <div class="countdown-box"><span id="seconds" class="countdown-number">00</span><span class="countdown-label">Secs</span></div>
+        <p style="letter-spacing: 2px;">April 23, 2026</p>
+        <div id="timer" class="countdown-container">
+            <div class="countdown-box"><span id="d" class="countdown-number">00</span>Days</div>
+            <div class="countdown-box"><span id="h" class="countdown-number">00</span>Hrs</div>
+            <div class="countdown-box"><span id="m" class="countdown-number">00</span>Mins</div>
+            <div class="countdown-box"><span id="s" class="countdown-number">00</span>Secs</div>
         </div>
     </header>
 
@@ -95,49 +71,44 @@
     <div class="container">
         <div id="journey" class="card">
             <h2>Our Journey</h2>
-            <div class="timeline-container">
-                <div class="timeline-step"><div class="timeline-marker">🕉️</div><div class="timeline-content"><h3>Divine Grace</h3><p>Every beautiful journey begins with a sacred step. Enveloped in the supreme grace of Lord Siddhi Vinayaka and the guiding light of our beloved Guruji, our paths converged. Their infinite blessings remain the cornerstone of our union.</p></div></div>
-                <div class="timeline-step"><div class="timeline-marker">💍</div><div class="timeline-content"><h3>Nischitartham</h3><p><strong>19th February, 2026</strong><br>The elegant beginning of our forever. Surrounded by the warmth of our families, we exchanged promises and sought the first blessings for a lifetime of togetherness.</p></div></div>
-                <div class="timeline-step"><div class="timeline-marker">🟡</div><div class="timeline-content"><h3>Mangala Snanam & Haldi</h3><p><strong>19th April, 2026</strong><br>A vibrant celebration of purity and joy. Bathed in golden turmeric, traditional melodies, and the deep affection of our loved ones, we begin the sacred preparations.</p></div></div>
-                <div class="timeline-step"><div class="timeline-marker">🌿</div><div class="timeline-content"><h3>Snathakam & Edurukolu</h3><p><strong>22nd April, 2026</strong><br>Honoring centuries of tradition. A day marked by the purifying Snathakam rituals, followed by the joyous Edurukolu, where our families playfully welcome the groom with festive warmth.</p></div></div>
-                <div class="timeline-step"><div class="timeline-marker">🪔</div><div class="timeline-content"><h3>The Sacred Muhurtham</h3><p><strong>23rd April, 2026 at 8:08 AM IST</strong><br>Venue: Goteti Kalyana Vedika (Narasimha Hall)<br><a href="https://www.google.com/maps/search/?api=1&query=Goteti+Kalyana+Vedika+Hyderabad" target="_blank" style="color:var(--primary); font-weight:700;">📍 View on Google Maps</a></p></div></div>
-            </div>
+            <div class="timeline-step"><div class="timeline-marker"></div><h3>Divine Grace</h3><p>Every beautiful journey begins with a sacred step. Enveloped in the supreme grace of Lord Siddhi Vinayaka and the guiding light of our beloved Guruji, our paths converged. Their infinite blessings remain the cornerstone of our union.</p></div>
+            <div class="timeline-step"><div class="timeline-marker"></div><h3>Nischitartham</h3><p><strong>19th February, 2026</strong><br>The elegant beginning of our forever. Surrounded by the warmth of our families, we exchanged promises and sought the first blessings for a lifetime of togetherness.</p></div>
+            <div class="timeline-step"><div class="timeline-marker"></div><h3>Mangala Snanam & Haldi</h3><p><strong>19th April, 2026</strong><br>A vibrant celebration of purity and joy. Bathed in golden turmeric, traditional melodies, and the deep affection of our loved ones, we begin the sacred preparations.</p></div>
+            <div class="timeline-step"><div class="timeline-marker"></div><h3>Snathakam & Edurukolu</h3><p><strong>22nd April, 2026</strong><br>Honoring centuries of tradition. A day marked by the purifying Snathakam rituals, followed by the joyous Edurukolu, where our families playfully welcome the groom with festive warmth.</p></div>
+            <div class="timeline-step"><div class="timeline-marker"></div><h3>The Sacred Muhurtham</h3><p><strong>23rd April, 2026 at 8:08 AM IST</strong><br>Venue: Goteti Kalyana Vedika (Narasimha Hall)<br><a href="https://maps.google.com/?q=Goteti+Kalyana+Vedika+Hyderabad" target="_blank" style="color:var(--primary); font-weight:bold;">📍 Open in Maps</a></p></div>
         </div>
 
-        <img src="page_21_enhanced.png" class="bapu-spacer spacer-left" alt="Bapu Art">
+        <img src="page_21_enhanced.png" class="bapu-spacer">
 
         <div id="upload" class="card">
-            <h2>Share Photos & Blessings</h2>
-            <form id="mediaForm">
-                <input type="text" id="mName" placeholder="Your Name" required>
-                <div class="privacy-toggle"><label><input type="radio" name="p" value="public" checked> 🌐 Public</label><label><input type="radio" name="p" value="private"> 🔒 Private</label></div>
-                <div class="upload-zone" onclick="document.getElementById('mFile').click()"><h3>🌺 Tap or Drag Files Here</h3></div>
-                <input type="file" id="mFile" accept="image/*,video/*" multiple style="display:none;">
-                <div id="mPrev" style="display:flex; gap:10px; margin-top:10px; overflow-x:auto;"></div>
-                <textarea id="mCap" rows="2" placeholder="Write a blessing..."></textarea>
-                <button type="submit" id="mSub">Upload Memory</button>
-            </form>
+            <h2>Upload Memories</h2>
+            <input type="text" id="guestName" placeholder="Your Name" required>
+            <div style="text-align:center; margin-bottom:10px;">
+                <label><input type="radio" name="priv" value="public" checked> Public</label>
+                <label style="margin-left:20px;"><input type="radio" name="priv" value="private"> Private</label>
+            </div>
+            <div class="upload-zone" onclick="document.getElementById('fileInput').click()">Tap to Select Photos/Videos</div>
+            <input type="file" id="fileInput" multiple accept="image/*,video/*" style="display:none;">
+            <div id="previews" style="display:flex; gap:5px; margin-top:10px; overflow-x:auto;"></div>
+            <textarea id="blessingText" placeholder="Write a blessing..."></textarea>
+            <button class="primary-btn" id="uploadBtn">Upload to Gallery</button>
         </div>
 
-        <img src="page_14_enhanced.png" class="bapu-spacer spacer-right" alt="Bapu Art">
-
         <div id="audio" class="card">
-            <h2>Leave a Voice Note</h2>
-            <input type="text" id="aName" placeholder="Your Name" required>
-            <div class="privacy-toggle"><label><input type="radio" name="ap" value="public" checked> 🌐 Public</label><label><input type="radio" name="ap" value="private"> 🔒 Private</label></div>
-            <button type="button" id="recBtn">⏺ Start Recording</button>
-            <button type="button" id="stopBtn" style="display:none;">⏹ Stop & Save</button>
-            <audio id="aPlay" controls style="width:100%; margin-top:15px; display:none;"></audio>
-            <button type="button" id="aSub" style="display:none; margin-top:10px;">Send Voice Note</button>
+            <h2>Voice Blessing</h2>
+            <button class="primary-btn" id="recBtn" style="background:#555;">⏺ Start Recording</button>
+            <button class="primary-btn" id="stopBtn" style="display:none;">⏹ Stop & Preview</button>
+            <audio id="audioPreview" controls style="width:100%; margin-top:10px; display:none;"></audio>
+            <button class="primary-btn" id="sendAudioBtn" style="display:none;">Send Voice Note</button>
         </div>
 
         <div id="gallery" class="card">
-            <h2>The Gallery</h2>
-            <div id="gallery-root"></div>
+            <h2>Gallery</h2>
+            <div id="gallery-root">Loading memories...</div>
         </div>
     </div>
 
-    <img src="Sita_Rama_Pattabhishekam.jpg" class="pattabhishekam-footer">
+    <img src="Sita_Rama_Pattabhishekam.jpg" class="footer-img">
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
@@ -147,71 +118,110 @@
         const firebaseConfig = { apiKey: "AIzaSyBRR2elLneGSivN4-8fqyf9QdV6U3uzWWQ", authDomain: "ourlovelywedding-53662.firebaseapp.com", projectId: "ourlovelywedding-53662", storageBucket: "ourlovelywedding-53662.firebasestorage.app", messagingSenderId: "711916877913", appId: "1:711916877913:web:315706a6eaa64e408d1948" };
         const app = initializeApp(firebaseConfig); const db = getFirestore(app); const storage = getStorage(app);
 
-        // --- UPLOAD HANDLER ---
-        const mFile = document.getElementById('mFile');
-        const mPrev = document.getElementById('mPrev');
-        mFile.onchange = () => {
-            mPrev.innerHTML = ''; Array.from(mFile.files).forEach(f => {
-                const reader = new FileReader(); reader.onload = e => {
-                    const el = document.createElement(f.type.startsWith('image/')?'img':'video');
-                    el.src = e.target.result; el.style.height="80px"; mPrev.appendChild(el);
-                }; reader.readAsDataURL(f);
+        // Preview Logic
+        const fInput = document.getElementById('fileInput');
+        fInput.onchange = () => {
+            document.getElementById('previews').innerHTML = '';
+            Array.from(fInput.files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    const el = document.createElement(file.type.startsWith('image') ? 'img' : 'video');
+                    el.src = e.target.result; el.style.height = "60px"; document.getElementById('previews').appendChild(el);
+                }; reader.readAsDataURL(file);
             });
         };
 
-        document.getElementById('mediaForm').onsubmit = async e => {
-            e.preventDefault();
-            const btn = document.getElementById('mSub'); btn.disabled = true; btn.innerText = "Processing...";
-            const isPrivate = document.querySelector('input[name="p"]:checked').value === 'private';
-            const name = document.getElementById('mName').value;
-            const caption = document.getElementById('mCap').value;
+        // Upload Photos
+        document.getElementById('uploadBtn').onclick = async () => {
+            const name = document.getElementById('guestName').value;
+            if(!name) return alert("Enter Name");
+            const btn = document.getElementById('uploadBtn'); btn.disabled = true; btn.innerText = "Uploading...";
+            const isPrivate = document.querySelector('input[name="priv"]:checked').value === 'private';
+            
             try {
-                if(mFile.files.length){
-                    for(const f of mFile.files){
-                        const sRef = ref(storage, `wedding/${Date.now()}_${f.name}`);
-                        const url = await getDownloadURL((await uploadBytesResumable(sRef, f)).ref);
-                        await addDoc(collection(db, "guest_memories"), { name, caption, isPrivate, fileUrl: url, fileType: f.type, likes: 0, timestamp: serverTimestamp() });
+                if(fInput.files.length > 0) {
+                    for(const file of fInput.files) {
+                        const sRef = ref(storage, `memories/${Date.now()}_${file.name}`);
+                        const url = await getDownloadURL((await uploadBytesResumable(sRef, file)).ref);
+                        await addDoc(collection(db, "guest_memories"), { name, isPrivate, fileUrl: url, fileType: file.type, caption: document.getElementById('blessingText').value, likes: 0, timestamp: serverTimestamp() });
                     }
-                } else {
-                    await addDoc(collection(db, "guest_memories"), { name, caption, isPrivate, fileUrl: null, fileType: 'text', likes: 0, timestamp: serverTimestamp() });
+                } else if (document.getElementById('blessingText').value) {
+                    await addDoc(collection(db, "guest_memories"), { name, isPrivate, fileUrl: null, fileType: 'text', caption: document.getElementById('blessingText').value, likes: 0, timestamp: serverTimestamp() });
                 }
-                alert("Memory Saved!"); location.reload();
-            } catch(e){ alert("Error! Try again."); btn.disabled = false; }
+                alert("Success!"); location.reload();
+            } catch(e) { alert("Error!"); btn.disabled = false; }
         };
 
-        // --- VOICE HANDLER ---
-        let rec, chunks = [], blob;
+        // Voice Logic
+        let mediaRec, chunks = [], blob;
         document.getElementById('recBtn').onclick = async () => {
-            try {
-                const s = await navigator.mediaDevices.getUserMedia({ audio: true });
-                rec = new MediaRecorder(s);
-                rec.ondataavailable = e => chunks.push(e.data);
-                rec.onstop = () => {
-                    blob = new Blob(chunks, { type: 'audio/webm' });
-                    document.getElementById('aPlay').src = URL.createObjectURL(blob);
-                    document.getElementById('aPlay').style.display = 'block';
-                    document.getElementById('aSub').style.display = 'block';
-                };
-                rec.start(); document.getElementById('recBtn').style.display='none'; document.getElementById('stopBtn').style.display='block';
-            } catch(e){ alert("Mic access needed."); }
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRec = new MediaRecorder(stream);
+            mediaRec.ondataavailable = e => chunks.push(e.data);
+            mediaRec.onstop = () => {
+                blob = new Blob(chunks, { type: 'audio/webm' });
+                document.getElementById('audioPreview').src = URL.createObjectURL(blob);
+                document.getElementById('audioPreview').style.display = 'block';
+                document.getElementById('sendAudioBtn').style.display = 'block';
+            };
+            mediaRec.start(); document.getElementById('recBtn').style.display='none'; document.getElementById('stopBtn').style.display='block';
         };
-        document.getElementById('stopBtn').onclick = () => { rec.stop(); document.getElementById('stopBtn').style.display='none'; document.getElementById('recBtn').style.display='block'; document.getElementById('recBtn').innerText="⏺ Re-record"; };
-        document.getElementById('aSub').onclick = async () => {
-            const isP = document.querySelector('input[name="ap"]:checked').value === 'private';
+        document.getElementById('stopBtn').onclick = () => { mediaRec.stop(); document.getElementById('stopBtn').style.display='none'; document.getElementById('recBtn').style.display='block'; document.getElementById('recBtn').innerText="Re-record"; };
+        document.getElementById('sendAudioBtn').onclick = async () => {
+            const name = document.getElementById('guestName').value || "Guest";
             const url = await getDownloadURL((await uploadBytesResumable(ref(storage, `voice/${Date.now()}.webm`), blob)).ref);
-            await addDoc(collection(db, "voice_notes"), { name: document.getElementById('aName').value, isPrivate: isP, audioUrl: url, likes: 0, timestamp: serverTimestamp() });
-            alert("Voice Note Sent!"); location.reload();
+            await addDoc(collection(db, "voice_notes"), { name, audioUrl: url, isPrivate: false, likes: 0, timestamp: serverTimestamp() });
+            alert("Sent!"); location.reload();
         };
 
-        // --- GALLERY ENGINE ---
+        // Gallery Engine
         let mData = [], vData = [];
-        window.curSet = []; window.curIdx = 0;
-
-        const render = () => {
+        const updateGallery = () => {
             const root = document.getElementById('gallery-root'); root.innerHTML = '';
             const groups = {};
-            mData.filter(d=>!d.isPrivate).forEach(d=>{ if(!groups[d.name]) groups[d.name]=[]; groups[d.name].push({...d, cat:'media'}); });
-            vData.filter(d=>!d.isPrivate).forEach(d=>{ if(!groups[d.name]) groups[d.name]=[]; groups[d.name].push({...d, cat:'voice'}); });
+            mData.filter(d=>!d.isPrivate).forEach(d => { if(!groups[d.name]) groups[d.name]=[]; groups[d.name].push({...d, type:'media'}); });
+            vData.filter(d=>!d.isPrivate).forEach(d => { if(!groups[d.name]) groups[d.name]=[]; groups[d.name].push({...d, type:'voice'}); });
 
             Object.keys(groups).forEach(name => {
-                const items
+                const folder = document.createElement('div'); folder.className = 'guest-folder';
+                let html = `<div class="guest-name-tag">${name}</div><div class="media-grid">`;
+                const userItems = groups[name];
+                userItems.filter(i => i.fileUrl).forEach(i => {
+                    html += i.fileType.startsWith('image') ? `<img src="${i.fileUrl}" onclick="showLB('${i.fileUrl}','img')">` : `<video src="${i.fileUrl}" onclick="showLB('${i.fileUrl}','vid')"></video>`;
+                });
+                html += `</div>`;
+                userItems.filter(i => i.fileType === 'text').forEach(i => {
+                    html += `<div class="text-blessing"><button class="like-btn" onclick="lM('${i.id}','m')">❤️ ${i.likes||0}</button>${i.caption}</div>`;
+                });
+                userItems.filter(i => i.type === 'voice').forEach(i => {
+                    html += `<div style="margin-top:10px;"><button class="like-btn" onclick="lM('${i.id}','v')">❤️ ${i.likes||0}</button><audio src="${i.audioUrl}" controls style="width:80%; height:30px;"></audio></div>`;
+                });
+                folder.innerHTML = html; root.appendChild(folder);
+            });
+        };
+
+        onSnapshot(query(collection(db,"guest_memories"),orderBy("timestamp","desc")), s => { mData = s.docs.map(d=>({id:d.id, ...d.data()})); updateGallery(); });
+        onSnapshot(query(collection(db,"voice_notes"),orderBy("timestamp","desc")), s => { vData = s.docs.map(d=>({id:d.id, ...d.data()})); updateGallery(); });
+
+        window.showLB = (url, type) => {
+            document.getElementById('lb-content').innerHTML = type==='img' ? `<img src="${url}">` : `<video src="${url}" controls autoplay></video>`;
+            document.getElementById('lightbox').classList.add('active');
+        };
+        window.lM = async (id, t) => { await updateDoc(doc(db, t==='m'?"guest_memories":"voice_notes", id), { likes: increment(1) }); };
+    </script>
+
+    <script>
+        function runTimer() {
+            const target = new Date("2026-04-23T08:08:00+05:30").getTime();
+            const now = new Date().getTime();
+            const d = target - now;
+            if(d < 0) { document.getElementById('timer').innerHTML = "Happily Married! 🌺"; return; }
+            document.getElementById('d').innerText = Math.floor(d/86400000);
+            document.getElementById('h').innerText = Math.floor((d%86400000)/3600000);
+            document.getElementById('m').innerText = Math.floor((d%3600000)/60000);
+            document.getElementById('s').innerText = Math.floor((d%60000)/1000);
+        }
+        setInterval(runTimer, 1000); runTimer();
+    </script>
+</body>
+</html>
