@@ -80,14 +80,19 @@
 
         .upload-zone { border: 2px dashed var(--secondary); border-radius: 15px; padding: 2rem; text-align: center; background: rgba(245, 176, 65, 0.1); cursor: pointer; transition: all 0.3s; }
         input[type="text"], textarea { width: 100%; padding: 15px; margin: 10px 0; border-radius: 10px; border: 1px solid #ddd; font-family: inherit; box-sizing: border-box; }
-        button { background-color: var(--primary); color: white; border: none; padding: 15px 30px; font-size: 1.1rem; border-radius: 30px; cursor: pointer; width: 100%; margin-top: 15px; font-weight: 500; }
-        
+        button { background-color: var(--primary); color: white; border: none; padding: 15px 30px; font-size: 1.1rem; border-radius: 30px; cursor: pointer; transition: transform 0.2s; width: 100%; margin-top: 15px; font-weight: 500; }
+        button:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(201, 42, 42, 0.3); }
+
+        .preview-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; margin-top: 15px; }
+        .preview-grid img, .preview-grid video { width: 100px; height: 100px; object-fit: cover; border-radius: 8px; }
+
         .lightbox { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.95); z-index: 2000; display: none; flex-direction: column; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease; }
         .lightbox.active { opacity: 1; display: flex !important; }
         .lightbox-content img, .lightbox-content video { max-width: 90vw; max-height: 80vh; border-radius: 8px; }
         .close-lightbox { position: absolute; top: 20px; right: 30px; color: white; font-size: 3rem; cursor: pointer; }
 
         .pattabhishekam-footer { width: 100%; max-width: 1200px; display: block; margin: 4rem auto 2rem auto; padding: 0 20px; box-sizing: border-box; mix-blend-mode: multiply; opacity: 0.95; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideUp { to { transform: translateY(0); opacity: 1; } }
 
         @media (max-width: 768px) {
@@ -134,13 +139,13 @@
             <div class="timeline-container">
                 <div class="timeline-step">
                     <div class="timeline-marker">🕉️</div>
-                    <div class="timeline-content"><h3>Divine Grace</h3><p>Every beautiful journey begins with a sacred step. Our paths converged under divine grace.</p></div>
+                    <div class="timeline-content"><h3>Divine Grace</h3><p>Every beautiful journey begins with a sacred step. Our paths converged under divine grace, marked by traditions and love.</p></div>
                 </div>
                 <div class="timeline-step">
                     <div class="timeline-marker">🪔</div>
                     <div class="timeline-content">
                         <h3>The Sacred Muhurtham</h3>
-                        <p><strong>23rd April, 2026 at 8:08 AM IST</strong><br>Venue: Goteti Kalyana Vedika<br>
+                        <p><strong>23rd April, 2026 at 8:08 AM IST</strong><br>Venue: Goteti Kalyana Vedika (Narasimha Hall)<br>
                         <a href="https://maps.app.goo.gl/dz2WuK7j3X2Y823R6" target="_blank" style="color: var(--primary); font-size: 0.9rem; text-decoration: none; font-weight: 500;">📍 View on Google Maps</a></p>
                     </div>
                 </div>
@@ -154,7 +159,7 @@
             <div class="sky-box" id="skyBox">
                 <div class="binary-star-container" onclick="revealStarMessage()"><div class="star-1"></div><div class="star-2"></div></div>
             </div>
-            <div id="starMessage" class="star-message"><strong>A Perfect Equilibrium</strong><br>Moving together as equals in shared light. ✨</div>
+            <div id="starMessage" class="star-message"><strong>A Perfect Equilibrium</strong><br>Just like Arundhati and Vashistha, moving together as equals in shared light. ✨</div>
         </div>
 
         <div id="upload" class="card">
@@ -180,10 +185,14 @@
             <button type="button" id="uploadAudioBtn" style="display: none;">Send Voice Note</button>
         </div>
 
+        <img src="page_8.png" class="bapu-spacer spacer-left" alt="Bapu Art">
+
         <div id="gallery" class="card">
             <h2>The Gallery</h2>
             <div id="guest-gallery-container"></div>
         </div>
+
+        <img src="page_15_enhanced.png" class="bapu-spacer spacer-right" alt="Bapu Art">
     </div>
 
     <img src="Sita_Rama_Pattabhishekam.jpg" class="pattabhishekam-footer" alt="Pattabhishekam">
@@ -247,14 +256,16 @@
                     document.getElementById('uploadAudioBtn').style.display = 'block';
                 };
                 mediaRecorder.start(); document.getElementById('recordBtn').style.display = 'none'; document.getElementById('stopBtn').style.display = 'block';
-            } catch(e){ alert("Mic Required!"); }
+            } catch(e){ alert("Microphone access denied!"); }
         };
-        document.getElementById('stopBtn').onclick = () => { mediaRecorder.stop(); document.getElementById('stopBtn').style.display = 'none'; document.getElementById('recordBtn').style.display = 'block'; };
+        document.getElementById('stopBtn').onclick = () => { mediaRecorder.stop(); document.getElementById('stopBtn').style.display = 'none'; document.getElementById('recordBtn').style.display = 'block'; document.getElementById('recordBtn').innerText = "⏺ Re-record Note"; };
         document.getElementById('uploadAudioBtn').onclick = async () => {
-            const btn = document.getElementById('uploadAudioBtn'); btn.innerText = "Sending...";
-            const url = await getDownloadURL((await uploadBytesResumable(ref(storage, `voice/${Date.now()}.webm`), audioBlob)).ref);
-            await addDoc(collection(db, "voice_notes"), { name: document.getElementById('audioName').value, audioUrl: url, timestamp: serverTimestamp() });
-            alert("Sent!"); location.reload();
+            const btn = document.getElementById('uploadAudioBtn'); btn.innerText = "Sending..."; btn.disabled = true;
+            try {
+                const url = await getDownloadURL((await uploadBytesResumable(ref(storage, `voice/${Date.now()}.webm`), audioBlob)).ref);
+                await addDoc(collection(db, "voice_notes"), { name: document.getElementById('audioName').value, audioUrl: url, timestamp: serverTimestamp() });
+                alert("Sent!"); location.reload();
+            } catch(e) { alert("Upload failed"); } finally { btn.innerText = "Send Voice Note"; btn.disabled = false; }
         };
 
         // --- GROUPED GALLERY ---
@@ -296,9 +307,24 @@
             }
         });
         window.revealStarMessage = () => document.getElementById('starMessage').style.display='block';
-        const target = new Date("April 23, 2026 08:08:00 GMT+0530").getTime();
-        setInterval(() => {
-            const now = new Date().getTime(); const d = target - now;
-            if(d<0) return document.getElementById('countdown').innerHTML = "<div class='just-married-msg'>Happily Married! 🌺</div>";
-            document.getElementById('days').innerText = Math.floor(d/86400000).toString().padStart(2,'0');
-            document.getElementById('hours').innerText = Math.floor((d%86400000)/3600000).toString().padStart(2,'0');
+
+        // --- BULLETPROOF TIMEZONE COUNTDOWN ---
+        const updateCountdown = () => {
+            const targetDate = new Date("2026-04-23T08:08:00+05:30").getTime();
+            const now = new Date().getTime();
+            const diff = targetDate - now;
+            if (diff <= 0) { document.getElementById('countdown').innerHTML = "<div class='just-married-msg'>Happily Married! 🌺</div>"; return; }
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const secs = Math.floor((diff % (1000 * 60)) / 1000);
+            document.getElementById('days').innerText = days.toString().padStart(2, '0');
+            document.getElementById('hours').innerText = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').innerText = mins.toString().padStart(2, '0');
+            document.getElementById('seconds').innerText = secs.toString().padStart(2, '0');
+        };
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+    </script>
+</body>
+</html>
