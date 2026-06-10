@@ -77,8 +77,8 @@
         
         @keyframes floatUp { 0% { bottom: -10%; opacity: 0; } 20% { opacity: 0.6; } 100% { bottom: 110%; opacity: 0; } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUp { to { transform: translateY(20px); opacity: 1; } }
-        @media (max-width: 768px) { h1 { font-size: 3rem; } .timeline-container::after { left: 31px; } .timeline-step { width: 100%; padding-left: 70px; text-align: left !important; } .timeline-marker { left: 11px !important; } }
+        @keyframes slideUp { to { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @media (max-width: 768px) { h1 { font-size: 3rem; } .timeline-container::after { left: 31px; } .timeline-step { width: 100%; padding-left: 70px; text-align: left !important; } .timeline-marker { left: 11px !important; } .lb-nav { font-size: 2.5rem; } }
     </style>
 </head>
 <body>
@@ -183,13 +183,12 @@
         const app = initializeApp(firebaseConfig); const db = getFirestore(app); const storage = getStorage(app);
 
         let mData = [], vData = [], curSet = [], curIdx = 0;
-        let droppedFiles = []; // Master memory cache for dragged files
+        let droppedFiles = [];
 
         const dropZone = document.getElementById('dropZone');
         const mediaInput = document.getElementById('mFile');
         const mediaPreview = document.getElementById('mPrev');
 
-        // Render preview thumbs cleanly
         function showFilePreviews(files) {
             mediaPreview.innerHTML = '';
             Array.from(files).forEach(f => {
@@ -200,28 +199,16 @@
             });
         }
 
-        // Click Zone Handler
         dropZone.onclick = () => mediaInput.click();
+        mediaInput.onchange = (e) => { droppedFiles = Array.from(e.target.files); showFilePreviews(droppedFiles); };
 
-        // Native File Dialog Picker
-        mediaInput.onchange = (e) => {
-            droppedFiles = Array.from(e.target.files);
-            showFilePreviews(droppedFiles);
-        };
-
-        // --- 🌺 FIXED DRAG AND DROP HANDLERS ---
         dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.style.background = 'rgba(245,176,65,0.2)'; });
         dropZone.addEventListener('dragleave', () => { dropZone.style.background = 'rgba(245,176,65,0.05)'; });
         dropZone.addEventListener('drop', e => {
-            e.preventDefault(); 
-            dropZone.style.background = 'rgba(245,176,65,0.05)';
-            if(e.dataTransfer.files.length){
-                droppedFiles = Array.from(e.dataTransfer.files);
-                showFilePreviews(droppedFiles);
-            }
+            e.preventDefault(); dropZone.style.background = 'rgba(245,176,65,0.05)';
+            if(e.dataTransfer.files.length){ droppedFiles = Array.from(e.dataTransfer.files); showFilePreviews(droppedFiles); }
         });
 
-        // Dynamic Form Submit Logic
         document.getElementById('mediaForm').onsubmit = async e => {
             e.preventDefault();
             const name = document.getElementById('mName').value; if(!name) return alert("Name required");
@@ -241,9 +228,10 @@
             } catch(e){ alert("Error"); btn.disabled = false; }
         };
 
-        // Voice
+        // Voice Note Engine
         let rec, chunks = [], blob;
         window.startRec = async () => {
+            chunks = [];
             const s = await navigator.mediaDevices.getUserMedia({ audio: true });
             rec = new MediaRecorder(s); rec.ondataavailable = e => chunks.push(e.data);
             rec.onstop = () => {
@@ -255,18 +243,25 @@
         };
         window.stopRec = () => { rec.stop(); document.getElementById('stopBtn').style.display='none'; document.getElementById('recBtn').style.display='block'; };
         window.uploadAudio = async () => {
-            const nameInput = document.getElementById('aName').value || "Guest";
+            const nameInput = document.getElementById('aName').value; if(!nameInput) return alert("Name required");
+            const btn = document.getElementById('aBtn'); btn.disabled = true; btn.innerText = "Sending...";
             const isPriv = document.querySelector('input[name="aPriv"]:checked').value === 'private';
-            const url = await getDownloadURL((await uploadBytesResumable(ref(storage, `voice/${Date.now()}.webm`), blob)).ref);
-            await addDoc(collection(db,"voice_notes"), { name: nameInput, audioUrl: url, isPrivate: isPriv, likes: 0, timestamp: serverTimestamp() });
-            alert("Sent!"); location.reload();
+            try {
+                const url = await getDownloadURL((await uploadBytesResumable(ref(storage, `voice/${Date.now()}.webm`), blob)).ref);
+                // FIXED PARITY: Field saved explicitly as isPrivate to align with rendering filter
+                await addDoc(collection(db,"voice_notes"), { name: nameInput, audioUrl: url, isPrivate: isPriv, likes: 0, timestamp: serverTimestamp() });
+                alert("Sent!"); location.reload();
+            } catch(e) { alert("Upload failed"); btn.disabled = false; btn.innerText = "Send Voice Note"; }
         };
 
+        // Render Loop
         const render = () => {
             const root = document.getElementById('gallery-root'); root.innerHTML = '';
             const groups = {};
-            mData.filter(d=>!d.isPrivate).forEach(d => { if(!groups[d.name]) groups[d.name]=[]; groups[d.name].push({...d, cat:'m'}); });
-            vData.filter(d=>!d.isPrivate).forEach(d => { if(!groups[d.name]) groups[d.name]=[]; groups[d.name].push({...d, cat:'v'}); });
+            
+            // Map records cleanly while guaranteeing fallback evaluation
+            mData.filter(d => d.isPrivate === false || d.isPrivate === 'false').forEach(d => { if(!groups[d.name]) groups[d.name]=[]; groups[d.name].push({...d, cat:'m'}); });
+            vData.filter(d => d.isPrivate === false || d.isPrivate === 'false').forEach(d => { if(!groups[d.name]) groups[d.name]=[]; groups[d.name].push({...d, cat:'v'}); });
 
             Object.keys(groups).forEach(name => {
                 const items = groups[name]; const card = document.createElement('div'); card.className = 'guest-folder-card';
@@ -281,7 +276,7 @@
                     h += `</div>`;
                 }
                 items.filter(i=>i.fileType==='text').forEach(i => { h += `<div class="guest-text-blessing"><button class="like-btn-small" onclick="lT('${i.id}')">❤️ <span id="lcnt-${i.id}">${i.likes||0}</span></button>"${i.caption}"</div>`; });
-                items.filter(i=>i.cat==='v').forEach(i => { h += `<div style="margin-bottom:10px;"><button class="like-btn-small" onclick="lV('${i.id}')">❤️ <span id="lcnt-${i.id}">${i.likes||0}</span></button><audio src="${i.audioUrl}" controls style="width:80%; height:30px;"></audio></div>`; });
+                items.filter(i=>i.cat==='v').forEach(i => { h += `<div style="margin-bottom:10px; display:flex; align-items:center; gap:10px;"><button class="like-btn-small" onclick="lV('${i.id}')" style="float:none; margin:0;">❤️ <span id="lcnt-${i.id}">${i.likes||0}</span></button><audio src="${i.audioUrl}" controls style="height:35px; flex-grow:1;"></audio></div>`; });
                 card.innerHTML = h + `</div>`; 
                 
                 card.querySelectorAll('.gal-img').forEach(el => {
@@ -298,10 +293,7 @@
         onSnapshot(query(collection(db,"guest_memories"),orderBy("timestamp","desc")), s => { mData = s.docs.map(d=>({id:d.id, ...d.data()})); render(); });
         onSnapshot(query(collection(db,"voice_notes"),orderBy("timestamp","desc")), s => { vData = s.docs.map(d=>({id:d.id, ...d.data()})); render(); });
 
-        window.openLB = (id, set) => {
-            curSet = set; curIdx = set.findIndex(i => i.id === id);
-            updateLB(); document.getElementById('lightbox').classList.add('active');
-        };
+        window.openLB = (id, set) => { curSet = set; curIdx = set.findIndex(i => i.id === id); updateLB(); document.getElementById('lightbox').classList.add('active'); };
         window.updateLB = () => {
             const i = curSet[curIdx]; document.getElementById('lb-count').innerText = i.likes||0;
             document.getElementById('lb-media-box').innerHTML = i.fileType.startsWith('image') ? `<img src="${i.fileUrl}" class="lb-content">` : `<video src="${i.fileUrl}" class="lb-content" controls autoplay></video>`;
@@ -317,13 +309,11 @@
         };
         window.lT = async id => {
             await updateDoc(doc(db, "guest_memories", id), { likes: increment(1) });
-            const span = document.getElementById('lcnt-' + id);
-            if(span) span.innerText = parseInt(span.innerText) + 1;
+            const span = document.getElementById('lcnt-' + id); if(span) span.innerText = parseInt(span.innerText) + 1;
         };
         window.lV = async id => {
             await updateDoc(doc(db, "voice_notes", id), { likes: increment(1) });
-            const span = document.getElementById('lcnt-' + id);
-            if(span) span.innerText = parseInt(span.innerText) + 1;
+            const span = document.getElementById('lcnt-' + id); if(span) span.innerText = parseInt(span.innerText) + 1;
         };
     </script>
 
