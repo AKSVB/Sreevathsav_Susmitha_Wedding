@@ -77,7 +77,7 @@
         
         @keyframes floatUp { 0% { bottom: -10%; opacity: 0; } 20% { opacity: 0.6; } 100% { bottom: 110%; opacity: 0; } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUp { to { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes slideUp { to { transform: translateY(20px); opacity: 1; } }
         @media (max-width: 768px) { h1 { font-size: 3rem; } .timeline-container::after { left: 31px; } .timeline-step { width: 100%; padding-left: 70px; text-align: left !important; } .timeline-marker { left: 11px !important; } .lb-nav { font-size: 2.5rem; } }
     </style>
 </head>
@@ -242,24 +242,26 @@
             rec.start(); document.getElementById('recBtn').style.display='none'; document.getElementById('stopBtn').style.display='block';
         };
         window.stopRec = () => { rec.stop(); document.getElementById('stopBtn').style.display='none'; document.getElementById('recBtn').style.display='block'; };
+        
         window.uploadAudio = async () => {
             const nameInput = document.getElementById('aName').value; if(!nameInput) return alert("Name required");
             const btn = document.getElementById('aBtn'); btn.disabled = true; btn.innerText = "Sending...";
             const isPriv = document.querySelector('input[name="aPriv"]:checked').value === 'private';
             try {
-                const url = await getDownloadURL((await uploadBytesResumable(ref(storage, `voice/${Date.now()}.webm`), blob)).ref);
-                // FIXED PARITY: Field saved explicitly as isPrivate to align with rendering filter
+                // --- 🛡️ CRITICAL FIX: EXPLICIT CONTENT-TYPE METADATA PASSED TO FORCE STREAMING ---
+                const storageRef = ref(storage, `voice/${Date.now()}.webm`);
+                const metadata = { contentType: 'audio/webm' };
+                const url = await getDownloadURL((await uploadBytesResumable(storageRef, blob, metadata)).ref);
+                
                 await addDoc(collection(db,"voice_notes"), { name: nameInput, audioUrl: url, isPrivate: isPriv, likes: 0, timestamp: serverTimestamp() });
                 alert("Sent!"); location.reload();
             } catch(e) { alert("Upload failed"); btn.disabled = false; btn.innerText = "Send Voice Note"; }
         };
 
-        // Render Loop
         const render = () => {
             const root = document.getElementById('gallery-root'); root.innerHTML = '';
             const groups = {};
             
-            // Map records cleanly while guaranteeing fallback evaluation
             mData.filter(d => d.isPrivate === false || d.isPrivate === 'false').forEach(d => { if(!groups[d.name]) groups[d.name]=[]; groups[d.name].push({...d, cat:'m'}); });
             vData.filter(d => d.isPrivate === false || d.isPrivate === 'false').forEach(d => { if(!groups[d.name]) groups[d.name]=[]; groups[d.name].push({...d, cat:'v'}); });
 
