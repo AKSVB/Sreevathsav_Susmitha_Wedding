@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sreevathsav & Susmitha | A Vedic Celebration</title>
+    <title>Sreevathsav & Susmitha | A Vedic Celebration of Love</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,400&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #c92a2a; --secondary: #f5b041; --bg-color: #fffaf0; --text-dark: #3e2723; --glass-bg: rgba(255, 255, 255, 0.9); }
@@ -137,16 +137,18 @@
 
         <div id="upload" class="card">
             <h2>Share Photos & Blessings</h2>
-            <input type="text" id="mName" class="styled-input" placeholder="Your Name" required>
-            <div class="privacy-row">
-                <label><input type="radio" name="mPriv" value="public" checked> 🌐 Public</label>
-                <label><input type="radio" name="mPriv" value="private"> 🔒 Private</label>
-            </div>
-            <div style="border: 2px dashed var(--secondary); padding: 2rem; text-align: center; cursor: pointer; border-radius: 12px; background: rgba(245, 176, 65, 0.05);" onclick="document.getElementById('mFile').click()"><h3>🌺 Tap or Drag Files Here</h3></div>
-            <input type="file" id="mFile" multiple accept="image/*,video/*" style="display:none;">
-            <div id="mPrev" style="display:flex; gap:10px; margin-top:10px; overflow-x:auto;"></div>
-            <textarea id="mCap" class="styled-input" rows="3" placeholder="Write a blessing..."></textarea>
-            <button onclick="uploadMedia()" id="mBtn" style="background:var(--primary); color:white; border:none; padding:15px; width:100%; border-radius:30px; font-weight:600; cursor:pointer; margin-top:10px;">Upload Memory</button>
+            <form id="mediaForm">
+                <input type="text" id="mName" class="styled-input" placeholder="Your Name" required>
+                <div class="privacy-row">
+                    <label><input type="radio" name="mPriv" value="public" checked> 🌐 Public</label>
+                    <label><input type="radio" name="mPriv" value="private"> 🔒 Private</label>
+                </div>
+                <div id="dropZone" style="border: 2px dashed var(--secondary); padding: 2rem; text-align: center; cursor: pointer; border-radius: 12px; background: rgba(245, 176, 65, 0.05);"><h3>🌺 Tap or Drag Files Here</h3></div>
+                <input type="file" id="mFile" multiple accept="image/*,video/*" style="display:none;">
+                <div id="mPrev" style="display:flex; gap:10px; margin-top:10px; overflow-x:auto;"></div>
+                <textarea id="mCap" class="styled-input" rows="3" placeholder="Write a blessing..."></textarea>
+                <button type="submit" id="mBtn" style="background:var(--primary); color:white; border:none; padding:15px; width:100%; border-radius:30px; font-weight:600; cursor:pointer; margin-top:10px;">Upload Memory</button>
+            </form>
         </div>
 
         <img src="page_14_enhanced.png" class="bapu-spacer spacer-right">
@@ -181,26 +183,54 @@
         const app = initializeApp(firebaseConfig); const db = getFirestore(app); const storage = getStorage(app);
 
         let mData = [], vData = [], curSet = [], curIdx = 0;
+        let droppedFiles = []; // Master memory cache for dragged files
 
-        document.getElementById('mFile').onchange = (e) => {
-            const p = document.getElementById('mPrev'); p.innerHTML = '';
-            Array.from(e.target.files).forEach(f => {
+        const dropZone = document.getElementById('dropZone');
+        const mediaInput = document.getElementById('mFile');
+        const mediaPreview = document.getElementById('mPrev');
+
+        // Render preview thumbs cleanly
+        function showFilePreviews(files) {
+            mediaPreview.innerHTML = '';
+            Array.from(files).forEach(f => {
                 const r = new FileReader(); r.onload = ev => {
                     const el = document.createElement(f.type.startsWith('image')?'img':'video');
-                    el.src = ev.target.result; el.style.height="70px"; el.style.borderRadius="8px"; p.appendChild(el);
+                    el.src = ev.target.result; el.style.height="70px"; el.style.borderRadius="8px"; mediaPreview.appendChild(el);
                 }; r.readAsDataURL(f);
             });
+        }
+
+        // Click Zone Handler
+        dropZone.onclick = () => mediaInput.click();
+
+        // Native File Dialog Picker
+        mediaInput.onchange = (e) => {
+            droppedFiles = Array.from(e.target.files);
+            showFilePreviews(droppedFiles);
         };
 
-        window.uploadMedia = async () => {
+        // --- 🌺 FIXED DRAG AND DROP HANDLERS ---
+        dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.style.background = 'rgba(245,176,65,0.2)'; });
+        dropZone.addEventListener('dragleave', () => { dropZone.style.background = 'rgba(245,176,65,0.05)'; });
+        dropZone.addEventListener('drop', e => {
+            e.preventDefault(); 
+            dropZone.style.background = 'rgba(245,176,65,0.05)';
+            if(e.dataTransfer.files.length){
+                droppedFiles = Array.from(e.dataTransfer.files);
+                showFilePreviews(droppedFiles);
+            }
+        });
+
+        // Dynamic Form Submit Logic
+        document.getElementById('mediaForm').onsubmit = async e => {
+            e.preventDefault();
             const name = document.getElementById('mName').value; if(!name) return alert("Name required");
             const btn = document.getElementById('mBtn'); btn.disabled = true; btn.innerText = "Sharing...";
-            const files = document.getElementById('mFile').files;
             const isPriv = document.querySelector('input[name="mPriv"]:checked').value === 'private';
             const cap = document.getElementById('mCap').value;
             try {
-                if(files.length){
-                    for(const f of files){
+                if(droppedFiles.length){
+                    for(const f of droppedFiles){
                         const url = await getDownloadURL((await uploadBytesResumable(ref(storage, `wedding/${Date.now()}_${f.name}`), f)).ref);
                         await addDoc(collection(db,"guest_memories"), { name, caption: cap, isPrivate: isPriv, fileUrl: url, fileType: f.type, likes: 0, timestamp: serverTimestamp() });
                     }
@@ -211,6 +241,7 @@
             } catch(e){ alert("Error"); btn.disabled = false; }
         };
 
+        // Voice
         let rec, chunks = [], blob;
         window.startRec = async () => {
             const s = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -245,7 +276,6 @@
                 if(mediaItems.length) {
                     h += `<div class="guest-photo-reel">`;
                     mediaItems.forEach((i, idx) => {
-                        // FIX: Use ID-based indexing to prevent quoting errors
                         h += i.fileType.startsWith('image') ? `<img src="${i.fileUrl}" class="gal-img" data-user="${name}" data-id="${i.id}">` : `<video src="${i.fileUrl}" class="gal-img" data-user="${name}" data-id="${i.id}"></video>`;
                     });
                     h += `</div>`;
@@ -254,10 +284,8 @@
                 items.filter(i=>i.cat==='v').forEach(i => { h += `<div style="margin-bottom:10px;"><button class="like-btn-small" onclick="lV('${i.id}')">❤️ <span id="lcnt-${i.id}">${i.likes||0}</span></button><audio src="${i.audioUrl}" controls style="width:80%; height:30px;"></audio></div>`; });
                 card.innerHTML = h + `</div>`; 
                 
-                // Add event listeners to the images in this folder
                 card.querySelectorAll('.gal-img').forEach(el => {
                     el.onclick = () => {
-                        const userName = el.getAttribute('data-user');
                         const itemId = el.getAttribute('data-id');
                         const userMedia = items.filter(i => i.fileUrl);
                         openLB(itemId, userMedia);
